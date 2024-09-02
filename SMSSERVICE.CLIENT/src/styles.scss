@@ -1,0 +1,253 @@
+/* You can add global styles to this file, and also import other style files */
+/**======================================================================
+=========================================================================
+Template Name: berry - Most Complete Bootstrap Admin Template
+Author: CodedThemes
+Support: https://codedthemes.support-hub.io/
+File: style.css
+=========================================================================
+=================================================================================== */
+
+
+
+// main framework
+
+
+
+@import 'scss/settings/preset-variables';
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+$pc-body-bg: map-get($preset-colors, 'preset-1', 'body');
+$pc-blue: map-get($preset-colors, 'preset-1', 'primary');
+$pc-secondary: map-get($preset-colors, 'preset-1', 'secondary');
+@import 'scss/settings/custom-variables';
+@import 'scss/settings/theme-variables';
+
+@import 'node_modules/bootstrap/scss/bootstrap';
+// main framework
+@import 'scss/themes/generic';
+@import 'scss/themes/general';
+
+// Layouts
+@import 'scss/themes/layouts/layouts';
+
+// Componants
+@import 'scss/themes/components/components';
+
+// pages
+@import 'scss/themes/pages/page';
+
+@import 'scss/themes/customizer';
+@import 'scss/style-preset.scss';
+
+// fonts
+@import url('scss/fonts/berry/berry-icons.css'); /** custom font icons - berry **/
+@import 'scss/fonts/tabler-icons.min.css';
+
+// //primeng
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+
+$color_1: var(--bs-body-color);
+$background-color_1: var(--bs-body-color);
+
+.mail-wrapper {
+	display: flex;
+	.mail-menulist {
+		width: 300px;
+		margin-right: var(--bs-gutter-x);
+		.scroll-block {
+			height: calc(100vh - 355px);
+		}
+		.list-group-item-action {
+			padding: 14px 16px;
+			justify-content: space-between;
+			display: flex;
+			align-items: center;
+			color: $color_1;
+			border: none;
+			border-radius: var(--bs-border-radius);
+			span {
+				display: flex;
+				align-items: center;
+			}
+			.avtar {
+				width: 22px;
+				height: 22px;
+				color: $color_1;
+				background: rgba(var(--bs-black-rgb), 0.1);
+			}
+			.material-icons-two-tone {
+				font-size: 22px;
+				margin-right: 8px;
+				opacity: .6;
+				&:not([class*=text-]) {
+					background-color: $background-color_1;
+				}
+			}
+		}
+		.list-group-item-action+.list-group-item.active {
+			margin-top: 0;
+		}
+	}
+	.mail-content {
+		flex: 1 1 auto;
+	}
+	.scroll-block {
+		height: calc(100vh - 325px);
+	}
+	.mail-offcanvas {
+		--bs-offcanvas-width: 301px;
+	}
+	.mail-offcanvas.show {
+		.collapse {
+			&:not(.show) {
+				display: block;
+			}
+		}
+		.mail-menulist {
+			margin-right: 0;
+			.scroll-block {
+				height: calc(100vh - 185px);
+			}
+		}
+	}
+	.img-user {
+		width: 40px;
+	}
+	.mail-table {
+		tr {
+			display: flex;
+			align-items: center;
+			&:not(:last-child) {
+				border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+			}
+			td {
+				height: 64px;
+				display: inline-flex;
+				align-items: center;
+				&:nth-child(1) {
+					width: 130px;
+				}
+				&:nth-child(2) {
+					width: 180px;
+					cursor: pointer;
+					.text-truncate {
+						width: 105px;
+					}
+				}
+				&:nth-child(4) {
+					width: 65px;
+				}
+				&:nth-child(5) {
+					width: 150px;
+				}
+				&:nth-child(3) {
+					flex: 1 1 auto;
+					min-width: 0;
+					overflow: hidden;
+					position: relative;
+					cursor: pointer;
+					.text-truncate {
+						position: absolute;
+						width: calc(100% - 1.4rem);
+						top: 0;
+						transform: translatey(-50%);
+						left: 0;
+					}
+				}
+			}
+		}
+	}
+	tr {
+		&:hover {
+			.mail-option {
+				.mail-buttons {
+					opacity: 1;
+					transform: translateY(-50%);
+				}
+			}
+		}
+	}
+}
+.mail-wrapper.mini-mail-list {
+	.img-user {
+		width: 30px;
+	}
+	.mail-table {
+		td {
+			height: 45px;
+			padding-top: .4rem;
+			padding-bottom: .4rem;
+			.avtar {
+				width: 26px;
+				height: 26px;
+				border-radius: 8px;
+				i.f-18 {
+					font-size: 16px;
+				}
+			}
+		}
+	}
+}
+.mail-option {
+	position: relative;
+	text-align: right;
+	.mail-buttons {
+		position: absolute;
+		top: 50%;
+		right: 5px;
+		padding: 6px;
+		opacity: 0;
+		transform: translateY(-50%) scale(.8);
+		transition: all .15s ease-in-out;
+		transform-origin: right;
+		background: var(--bs-card-bg);
+		border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+		border-radius: var(--bs-border-radius);
+	}
+}
+
+
+.list-group-flush {
+    border-radius: 0
+}
+
+.list-group-flush>.list-group-item {
+    border-width: 0 0 var(--bs-list-group-border-width)
+}
+
+.list-group-flush>.list-group-item:last-child {
+    border-bottom-width: 0
+}
+
+.custom-table {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .custom-table thead th {
+    background-color: #3333339a;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .custom-table tbody td {
+    padding: 10px;
+    text-align: center;
+  }
+
+  .custom-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  .custom-table tbody tr:hover {
+    background-color: #e0e0e0;
+  }
+

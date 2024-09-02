@@ -1,0 +1,51 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">User Roles</h5>
+        <button type="button" class="btn-close" id="ModalClose" (click)="closeModal()" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h2>{{user.name}}</h2>
+
+            <div class="row">
+                <div class="d-flex  justify-content-around p-2 ">
+                    <div class="row mb-3">
+                        <div class="col-sm-10">
+                            <label for="assignedRole">Not Assigned Roles</label>
+                            <select class="form-select" multiple #notAssignROle style="height: 230px;width:300px">
+
+                                <option *ngFor="let role of notAssignedRoles" [value]="role.name">{{role.name}}</option>
+                                <label for="assignedRole">Role Caategory</label>
+                            </select>
+                            
+                        </div>
+                    </div>
+
+
+                    <div class="text-center">
+                        <button class="btn btn-outline-success mt-3" [disabled]="notAssignROle.value"
+                            (click)="assignRole(getSelectedRoleValues(notAssignROle))"> <i
+                                class="bi bi-arrow-right-short" style="font-size: 25px;"></i></button><br> <br>
+                        <button class="btn btn-outline-danger" (click)="removeRole(getSelectedRoleValues(asssignRole))">
+                            <i class="bi bi-arrow-left-short" style="font-size: 25px;"></i> </button>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-10">
+                            <label for="assignedRole">Assigned Roles</label>
+                            <select class="form-select" multiple #asssignRole [disabled]="asssignRole.value"
+                                style="height: 230px;width:300px">
+                                <option *ngFor="let role of assignedRoles" value={{role.name}}>{{role.name}}
+                                </option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

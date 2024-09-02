@@ -1,0 +1,16 @@
+
+<div class="cool-autocomplete-container">
+    <!-- <ng-autocomplete [data]="data" [disabled]="isDisabled" searchKeyword="name" multiple (selected)="selectEvent($event)"
+        (inputChanged)="onChangeSearch($event)" (inputFocused)="onFocused($event)" [itemTemplate]="itemTemplate"
+        [notFoundTemplate]="notFoundTemplate" [initialValue]="placeHolder"  required #newItem class="cool-autocomplete">
+    </ng-autocomplete> -->
+  </div>
+
+
+<ng-template #itemTemplate let-item>
+    <a [innerHTML]="item.name"></a>
+</ng-template>
+
+<ng-template #notFoundTemplate let-notFound>
+    <div [innerHTML]="notFound"></div>
+</ng-template>

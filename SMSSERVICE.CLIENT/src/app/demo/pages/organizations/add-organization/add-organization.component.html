@@ -1,0 +1,94 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">Add Organization</h5>
+        <button type="button" class="btn-close" id="ModalClose" (click)="closeModal()" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+          <form [formGroup]="OrganizationForm" (submit)="onSubmit()">
+
+              <div class="row">
+                  <div class="col-md-3 ">
+                      <img [src]="imagePath ? imagePath : 'assets/images/profile.jpg'" alt="Profile"
+                          style="width: 100%;">
+                      <input #file (change)="onUpload($event)" type="file" style="display: none;" accept="image/*" />
+                      <div class="pt-2">
+                          <a (click)="file.click()" style="width: 100%;" class="btn btn-outline-primary btn-sm"
+                              title="Upload new profile image">
+                              <i class="bi bi-upload"></i> Upload Image
+                          </a>
+                      </div>
+                  </div>
+
+                  <div class="col-9">
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" formControlName="organizationName" id="floatingInput"  />
+                          <span *ngIf="!OrganizationForm.get('organizationName').valid && OrganizationForm.get('organizationName').touched"></span>
+                          <label for="floatingInput">Organization Name</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="floatingInput" formControlName="nameLocal"  />
+                          <span *ngIf="!OrganizationForm.get('nameLocal').valid && OrganizationForm.get('nameLocal').touched"></span>
+                          <label for="floatingInput">Local Name</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" formControlName="phoneNumber" id="floatingInput"  />
+                            <span *ngIf="!OrganizationForm.get('phoneNumber').valid && OrganizationForm.get('phoneNumber').touched"></span>
+                            <label for="floatingInput">Phone Number</label>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="floatingInput" formControlName="email"  />
+                          <span *ngIf="!OrganizationForm.get('email').valid && OrganizationForm.get('email').touched"></span>
+                          <label for="floatingInput">Email</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="floatingInput" formControlName="address"  />
+                          <span *ngIf="!OrganizationForm.get('address').valid && OrganizationForm.get('address').touched"></span>
+                          <label for="floatingInput">Address</label>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="form-floating mb-3">
+
+
+                          <select class="form-control"  id="floatingInput"  formControlName="organizationStatus" aria-label="State">
+
+                              <option *ngFor="let item of organizationStatusDropDownItems" [value]="item.code">{{item.name}}</option>
+
+
+                          </select>
+                          <span *ngIf="!OrganizationForm.get('organizationStatus').valid && OrganizationForm.get('organizationStatus').touched">Please Select Status!</span>
+                          <label for="floatingInput">Status</label>
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+
+
+
+                <div class="modal-footer"> <button type="button" class="btn btn-outline-secondary"
+                  (click)="closeModal()">Close</button> <button type="button" type="submit"
+                  [disabled]="!OrganizationForm.valid" class="btn btn-outline-primary">Save
+                  changes</button></div>
+
+          </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+
+<div class="row">
+  <div class="col-9">
+    <div class="row">
+      <div class="col-md-4" *ngIf="allowedRoles(['Admin'])">
+        <div class="form-floating mb-3">
+          <select class='form-control' [(ngModel)]="selectedOrganization" #mySelect (change)='getGroup(mySelect.value)'>
+            <option class='option' *ngFor='let options of organizationSelectList' [value]="options.value">
+              {{options.label}}</option>
+          </select>
+          <label for="floatingInput">Organizations</label>
+        </div>
+      </div>
+      <div class="col-md-4" [hidden]="!isFirstSelectOptionSelected">
+        <div class="form-floating mb-3">
+          <select class="form-control" [(ngModel)]="selectedGroup" #mySelect1
+            (change)='getReport(mySelect1.value)'>
+            <option class="option" *ngFor="let option of groupOptions" [value]="option.value">{{option.label}}</option>
+
+          </select>
+          <label for="floatingInput">Groups</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="main-body p-2">
+  <div class="card">
+      <div class="card-header">
+
+
+
+      </div>
+      <div class="card-body">
+
+          <p-table [value]="reports" [tableStyle]="{ 'min-width': '50rem' }">
+
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>#</th>
+                      <th>Group</th>
+                      <th>Message</th>
+                      <th>Language</th>
+
+                      <th>Number Of Customers</th>
+                      <th>Status</th>
+
+                      <th>organizationName</th>
+                      <th>Send Time</th>
+
+                      <th>UnSent Count</th>
+
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-report let-i="rowIndex">
+                  <tr class="table-row">
+
+                      <td>{{i+1}}</td>
+                      <td> {{ report.groupName }} </td>
+                      <td> {{ report.content }} </td>
+                      <td> {{ report.language }} </td>
+
+                      <td> {{ report.numberOfCustomer }} </td>
+                      <td> {{ report.messageStatus }} </td>
+
+                      <td> {{ report.organizationName }} </td>
+
+                      <td> {{ report.createdDate }} </td>
+                      <td> {{ report.unSentCount }} </td>
+
+
+
+
+                  </tr>
+              </ng-template>
+
+
+
+              <ng-template pTemplate="emptymessage" >
+                <tr *ngIf="selectedGroup !== null">
+                    <td colspan="8" style="text-align:center;" >No Messages Found.</td>
+                </tr>
+                <tr *ngIf="selectedGroup === null">
+                  <td colspan="8" style="text-align:center;">Please Select Group</td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Loading Message Data. Please Wait.</td>
+                </tr>
+            </ng-template>
+
+
+          </p-table>
+
+      </div>
+  </div>
+</div>
+
+

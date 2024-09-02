@@ -1,0 +1,35 @@
+
+<div class="modal-content">
+  <div class="modal-header">
+      <h5 class="modal-title">Write Remark for Reject Message</h5>
+      <button type="button" class="btn-close" id="ModalClose" (click)="closeModal()" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+  </div>
+
+  <div class="card">
+      <div class="card-body">
+        <form [formGroup]="rejectForm" (submit)="onSubmit()">
+
+            <div class="row">
+                <div class="col-12">
+                  <div class="row">
+
+                      <div class="form-floating mb-3">
+                        <!-- <input type="text" class="form-control" formControlName="message" id="floatingInput"  /> -->
+                        <textarea class="form-control" id="floatingInput" formControlName="remark" aria-label="State" style="height: 100px;"></textarea>
+                        <label for="floatingInput">Remark</label>
+                      </div>
+                  </div>
+                </div>
+            </div>
+
+
+              <div class="modal-footer"> <button type="button" class="btn btn-outline-secondary"
+                (click)="closeModal()">Close</button> <button type="button" type="submit"
+                [disabled]="!rejectForm.valid" class="btn btn-outline-primary">Save
+                changes</button></div>
+
+        </form>
+      </div>
+  </div>
+</div>

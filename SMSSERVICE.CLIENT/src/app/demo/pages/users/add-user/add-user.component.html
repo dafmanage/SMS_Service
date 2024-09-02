@@ -1,0 +1,59 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">Add User</h5>
+        <button type="button" class="btn-close" id="ModalClose" (click)="closeModal()" data-bs-dismiss="modal"
+            aria-label="Close"></button>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+
+
+            <form class="" [formGroup]="userForm" (ngSubmit)="submit()">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+
+
+                            <select class="form-control" formControlName="OrganizationId">
+
+                                <option>--Select Organization---</option>
+                                <option *ngFor="let organization of organizationList" [value]="organization.id">{{organization.name}}</option>
+                            </select>
+                            <label for="floatingInput">Organization</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" formControlName="UserName" id="floatingInput" />
+                            <label for="floatingInput">User Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="floatingInput" formControlName="Password" />
+                            <label for="floatingInput">Password</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" formControlName="ConfirmPassword"
+                                id="floatingInput" />
+                            <label for="floatingInput">Confirm Password</label>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            <div class="modal-footer"> <button type="button" class="btn btn-outline-secondary"
+                    (click)="closeModal()">Close</button> <button type="button" type="submit"
+                    [disabled]="!userForm.valid"
+                    class="btn btn-outline-primary">Add user</button></div>
+                </form>
+        </div>
+    </div>
+
+</div>

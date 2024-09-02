@@ -1,0 +1,66 @@
+<div class="page-header ng-star-inserted">
+  <div class="page-block">
+      <div class="row align-items-center">
+          <div class="col-md-12">
+              <div class="page-header-title"><!----><!---->
+                  <h5 class="mb-2 ng-star-inserted"> Configuration </h5>
+              </div>
+              <ul class="breadcrumb">
+                  <li class="breadcrumb-item"><a _>System Users</a></li>
+                  <li class="breadcrumb-item ng-star-inserted">
+                      <a href="javascript:">
+                          Users List
+                      </a>
+              </ul>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="main-body">
+ 
+        <div class="card">
+            <div class="card-header">
+               
+                <div class="col-lg-12 text-end p-2">
+                    <button type="button" class="btn btn-outline-primary" (click)="addUser()"><i
+                            class="pi pi-user-plus me-1"></i>
+                        User</button>
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+
+                <div class="row">
+                <div *ngFor="let user of  users" class="col-4 " >
+                    <div class="card bg-secondary-dark dashnum-card text-white overflow-hidden" (click)="userRoles(user)">
+                      <span class="round small"></span>
+                      <span class="round big"></span>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col">
+                            <div class="avtar">
+                              <i class="text-white ti ti-credit-card"></i>
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <div class="btn-group" ngbDropdown>
+                              <a type="button" class="avtar bg-secondary dropdown-toggle arrow-none" data-bs-toggle="dropdown" ngbDropdownToggle>
+                                <i class="ti ti-dots"></i>
+                              </a>
+                              <ul class="dropdown-menu dropdown-menu-end"  ngbDropdownMenu>
+                             
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                        <span class="text-white d-block fs-1 fw-bold my-2">{{user.name}} <i class="ti ti-arrow-up-right-circle opacity-50"></i></span>
+                        <p class="mb-0 opacity-50">{{user.email}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+   
+</div>

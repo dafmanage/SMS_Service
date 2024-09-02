@@ -1,0 +1,23 @@
+.b-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+//   .b-brand img {
+//     margin-right: 2px;
+//   }
+  
+  .b-brand span {
+    font-size: 13px;
+    margin-right: 8px;
+  }
+  
+
+  
+  .b-brand:hover img {
+    filter: brightness(150%);
+  }

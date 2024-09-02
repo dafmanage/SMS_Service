@@ -1,0 +1,110 @@
+<div class="row">
+  <div class="col-9">
+    <div class="row">
+      <div class="col-md-4" >
+        <div class="form-floating mb-3">
+          <select class="form-control" [(ngModel)]="selectedGroup"
+            #mySelect1
+            (change)='getMessage(mySelect1.value)'>
+            <option class="option" *ngFor="let option of groupOptions" [value]="option.value">{{option.label}}</option>
+
+          </select>
+          <label for="floatingInput">Groups</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="main-body p-2">
+  <div class="card">
+      <div class="card-header">
+
+
+          <div class="col-lg-12 text-end p-2">
+              <button type="button" class="btn btn-outline-primary" (click)="sendMessage()">
+                <i class="pi pi-comment me-1"></i>
+                  Send Message</button>
+          </div>
+      </div>
+      <div class="card-body">
+
+          <p-table [value]="sendmessages" [tableStyle]="{ 'min-width': '50rem' }">
+
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>#</th>
+                      <th>Group</th>
+                      <th>Message</th>
+                      <th>Language</th>
+
+                      <th>Number Of Customers</th>
+                      <th>Status</th>
+                      <!-- <th>Sent Time</th> -->
+                      <th>Approved Status</th>
+                      <th>Text Size</th>
+
+                      <th></th>
+
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-sendmessage let-i="rowIndex">
+                  <tr class="table-row">
+
+                      <td>{{i+1}}</td>
+                      <td> {{ sendmessage.messageGroup }} </td>
+                      <td> {{ sendmessage.content }} </td>
+                      <td> {{ sendmessage.language }} </td>
+
+                      <td> {{ sendmessage.numberOfCustomer }} </td>
+                      <td> {{ sendmessage.messageStatus }} </td>
+                      <!-- <td> {{ sendmessage.language }} </td> -->
+                      <td> {{ sendmessage.isApproved }} </td>
+                      <td> {{ sendmessage.textSize }} </td>
+
+
+                      <td>
+                          <button type="button" class="btn btn-outline-warning" (click)="updateMessage(sendmessage)" ><i
+                                  class="pi pi-pencil me-1"></i>
+                          </button>
+                      </td>
+
+                  </tr>
+              </ng-template>
+
+
+
+              <ng-template pTemplate="emptymessage" >
+                <tr *ngIf="selectedGroup !== null">
+                    <td colspan="8" style="text-align:center;" >No Messages Found.</td>
+                </tr>
+                <tr *ngIf="selectedGroup === null">
+                  <td colspan="8" style="text-align:center;">Please Select Group</td>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Loading Message Data. Please Wait.</td>
+                </tr>
+            </ng-template>
+
+
+          </p-table>
+
+      </div>
+  </div>
+</div>
+
+

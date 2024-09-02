@@ -1,0 +1,114 @@
+<div class="page-header">
+    <div class="page-block">
+        <div class="row align-items-center">
+            <div class="col-md-12">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">Configuration</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a>System Users</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0)">Application</a></li>
+                    <li class="breadcrumb-item" aria-current="page"> Organization List</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="main-body p-2">
+    <!-- [ Typography ] start -->
+    <div class="card">
+        <div class="card-header">
+
+
+            <div class="col-lg-12 text-end p-2">
+                <button type="button" class="btn btn-outline-primary" (click)="addOrganization()"><i
+                        class="pi pi-user-plus me-1"></i>
+                    Organization</button>
+            </div>
+        </div>
+
+        <div class="card-body">
+
+            <p-table [value]="organizations" [tableStyle]="{ 'min-width': '50rem' }">
+                <!-- <ng-template pTemplate="caption">
+                    <div class="flex align-items-center justify-content-between">
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."
+                                class="w-full sm:w-auto" />
+                        </span>
+                    </div>
+                </ng-template> -->
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Organization Logo</th>
+                        <th>Organization Name</th>
+                        <th>Phone Number / Email </th>
+                        <th>Address</th>
+                        <!-- <th>Birth Date</th> -->
+                        <th>nameLocal</th>
+                        <th>Employment Status</th>
+                        <th>Action</th>
+
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-organization>
+                    <tr class="table-row">
+                        <td><img [src]="getImagePath(organization.imagePath)" width="40" alt="user png"
+                        class="rounded-circle"></td>
+                        <td>{{ organization.name }} </td>
+                            <!-- <img [src]="getImagePath(organization.imagePath)" width="40" alt="user png"
+                                class="rounded-circle"> -->
+                            <!-- <div class="organization-info">
+                                <div class="organization-name"></div>
+                              </div> -->
+                                <!-- <div class="organization-code">{{ organization.organizationCode.toUpperCase() }}</div> -->
+
+
+                        <td>{{ organization.phoneNumber }} / {{organization.email}} </td>
+                        <td>{{ organization.address }} </td>
+                        <td>{{ organization.nameLocal }} </td>
+                        <!-- <td>{{ organization.employmentPosition}}</td>
+                        <td>{{ organization.employmentDate | date:"MMM dd, YYY" }}</td> -->
+                        <td>{{ organization.organizationStatus }}</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-warning" (click)="updateOrganization(organization)"><i
+                                    class="pi pi-pencil me-1"></i>
+                            </button>
+                        </td>
+
+
+
+                    </tr>
+                </ng-template>
+
+
+            </p-table>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

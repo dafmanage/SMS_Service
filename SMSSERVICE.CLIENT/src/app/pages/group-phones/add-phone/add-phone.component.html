@@ -1,0 +1,69 @@
+
+<div class="modal-content">
+  <div class="modal-header">
+      <h5 class="modal-title">Add Phones</h5>
+      <button type="button" class="btn-close" id="ModalClose" (click)="closeModal()" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+  </div>
+
+  <div class="card">
+      <div class="card-body">
+        <form [formGroup]="groupphonesForm" (submit)="onSubmit()">
+
+            <div class="row">
+
+
+                <div class="col-9">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" formControlName="fullName" id="floatingInput"  />
+                        <span *ngIf="!groupphonesForm.get('fullName').valid && groupphonesForm.get('fullName').touched"></span>
+                        <label for="floatingInput">Full Name</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingInput" formControlName="phoneNumber"  />
+                        <span *ngIf="!groupphonesForm.get('phoneNumber').valid && groupphonesForm.get('phoneNumber').touched"></span>
+                        <label for="floatingInput">Phone Number</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" formControlName="remark" id="floatingInput"  />
+                          <span *ngIf="!groupphonesForm.get('remark').valid && groupphonesForm.get('remark').touched"></span>
+                          <label for="floatingInput">Remark</label>
+                        </div>
+                      </div>
+                  </div>
+
+                </div>
+
+
+
+                <div class="col-9">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-floating mb-3">
+                        <select class="form-control"  id="floatingInput"  formControlName="groupName" aria-label="State">
+                            <option *ngFor="let item of groupSelectList" [value]="item.value">{{item.label}}</option>
+                        </select>
+                        <label for="floatingInput">Group</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+
+
+              <div class="modal-footer"> <button type="button" class="btn btn-outline-secondary"
+                (click)="closeModal()">Close</button> <button type="button" type="submit"
+                [disabled]="!groupphonesForm.valid" class="btn btn-outline-primary">Save
+                changes</button></div>
+
+        </form>
+      </div>
+  </div>
+</div>

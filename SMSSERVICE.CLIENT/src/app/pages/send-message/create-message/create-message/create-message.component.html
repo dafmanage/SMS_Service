@@ -1,0 +1,85 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">Create Message</h5>
+    <button type="button" class="btn-close" id="ModalClose" (click)="closeModal()" data-bs-dismiss="modal"
+      aria-label="Close"></button>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <form [formGroup]="sendmessageForm" (submit)="onSubmit()">
+
+        <div class="row">
+
+
+          <div class="col-12">
+            <div class="row">
+
+              <!-- <div class="col-6">
+                      <div class="form-floating mb-3">
+                      <p-dropdown [options]="groupSelectList" optionLabel="label"
+                          formControlName="group" placeholder="Select Task Status" [showClear]="true"></p-dropdown>
+                    </div>
+                  </div> -->
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+
+                  <select class="form-control dropdown-icon" id="floatingInput" formControlName="group"
+                    aria-label="State">
+                    <option *ngFor="let item of groupSelectList" [value]="item.value">{{item.label}}</option>
+
+                  </select>
+
+                  <label for="floatingInput">Message Group</label>
+
+                </div>
+              </div>
+              <!-- <div class="col-6">
+                      <div class="form-floating mb-3">
+                      <p-dropdown [options]="languageDropDownItem" optionLabel="name"
+                          formControlName="language" placeholder="Select Task Status" [showClear]="true"></p-dropdown>
+                    </div>
+                  </div> -->
+
+              <div class="col-md-6">
+                <div class="form-floating mb-3">
+                  <select class="form-control dropdown-icon" id="floatingInput" formControlName="language"
+                    aria-label="State">
+
+                    <option *ngFor="let item of languageDropDownItem" [value]="item.code">{{item.name}}</option>
+
+                  </select>
+                  <label for="floatingInput">Language</label>
+                </div>
+              </div>
+
+            </div>
+
+
+
+            <div class="col-12">
+              <div class="row">
+
+                <div class="form-floating mb-3">
+                  <!-- <input type="text" class="form-control" formControlName="message" id="floatingInput"  /> -->
+                  <textarea class="form-control" id="floatingInput" formControlName="message" aria-label="State"
+                    style="height: 100px;"></textarea>
+                  <label for="floatingInput">Message</label>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="modal-footer"> <button type="button" class="btn btn-outline-secondary"
+            (click)="closeModal()">Close</button> <button type="button" type="submit"
+            [disabled]="!sendmessageForm.valid" class="btn btn-outline-primary">Save
+            changes</button></div>
+
+      </form>
+    </div>
+  </div>
+</div>

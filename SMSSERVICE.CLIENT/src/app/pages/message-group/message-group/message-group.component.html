@@ -1,0 +1,157 @@
+<div class="row" *ngIf="allowedRoles(['Admin'])">
+  <div class="col-9">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-floating mb-3">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="background: #e1d8f1; color: #673ab7;">
+          <select class='form-control'
+                          [(ngModel)]="selectedOrganization"
+                          #mySelect
+                          (change)='getGroups(mySelect.value)'
+                          >
+                          <option class='option'
+                            *ngFor='let options of messagegroupSelectList'
+                            [value]="options.value">{{options.label}}</option>
+                      </select>
+                      <label for="floatingInput">Organizations</label>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <!-- <div class="col-9">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-floating mb-3">
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-building"></i> {{ selectedOrganization ? selectedOrganization : 'Organizations' }}
+            </button>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li *ngFor="let option of messagegroupSelectList">
+                <a class="dropdown-item" (click)="selectedOrganization = option.value; getGroups(option.value)">
+                  {{ option.label }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- <div class="col-9">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-floating mb-3">
+          <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"          aria-expanded="false">
+  <i
+  class="bi bi-building"></i> Organizations
+            </button>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li *ngFor="let option of messagegroupSelectList">
+                <a class="dropdown-item" (click)="selectedOrganization = option.value; getGroups(option.value)">
+                  {{ option.label }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+
+
+
+
+
+<div class="main-body p-2">
+  <div class="card">
+      <div class="card-header">
+
+
+          <div class="col-lg-12 text-end p-2">
+              <button type="button" class="btn btn-outline-primary" (click)="addGroup()"><i
+                      class="pi pi-user-plus me-1"></i>
+                  Message Group</button>
+          </div>
+      </div>
+
+      <div class="card-body">
+
+          <p-table [value]="messagegroups" [tableStyle]="{ 'min-width': '50rem' }">
+
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>#</th>
+                      <th>Group</th>
+                      <th>Group Code </th>
+                      <th>Remark</th>
+
+                      <th></th>
+
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-messagegroup let-i="rowIndex">
+                  <tr class="table-row">
+
+                      <td>{{i+1}}</td>
+                      <td>{{ messagegroup.groupName }}</td>
+                      <td>{{messagegroup.groupCode}} </td>
+
+                      <td>{{ messagegroup.remark}}</td>
+                      <td>
+                          <button type="button" class="btn btn-outline-warning" (click)="updateGroup(messagegroup)" ><i
+                                  class="pi pi-pencil me-1"></i>
+                          </button>
+                      </td>
+
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage" >
+
+                <tr *ngIf="selectedOrganization === null">
+                  <td colspan="8" style="text-align:center;">Please Select Group</td>
+              </tr>
+
+            <tr *ngIf="selectedOrganization !== null ">
+              <td colspan="8" style="text-align:center;" >No Messages Found.</td>
+          </tr>
+            </ng-template>
+
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Loading Message Data. Please Wait.</td>
+                </tr>
+            </ng-template>
+
+          </p-table>
+
+      </div>
+  </div>
+</div>

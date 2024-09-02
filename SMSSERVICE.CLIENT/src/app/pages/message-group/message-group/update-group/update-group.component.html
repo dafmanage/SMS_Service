@@ -1,0 +1,56 @@
+
+<div class="modal-content">
+  <div class="modal-header">
+      <h5 class="modal-title">Add Group</h5>
+      <button type="button" class="btn-close" id="ModalClose" (click)="closeModal()" data-bs-dismiss="modal"
+          aria-label="Close"></button>
+  </div>
+
+  <div class="card">
+      <div class="card-body">
+        <form [formGroup]="messagegroupsForm" (submit)="onSubmit()">
+
+            <div class="row">
+
+
+                <div class="col-9">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" formControlName="groupName" id="floatingInput"  />
+                        <span *ngIf="!messagegroupsForm.get('groupName').valid && messagegroupsForm.get('groupName').touched"></span>
+                        <label for="floatingInput">Group Name</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingInput" formControlName="groupCode"  />
+                        <span *ngIf="!messagegroupsForm.get('groupCode').valid && messagegroupsForm.get('groupCode').touched"></span>
+                        <label for="floatingInput">Group Code</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" formControlName="remark" id="floatingInput"  />
+                          <span *ngIf="!messagegroupsForm.get('remark').valid && messagegroupsForm.get('remark').touched"></span>
+                          <label for="floatingInput">Remark</label>
+                        </div>
+                      </div>
+                  </div>
+
+                </div>
+
+
+            </div>
+
+
+
+              <div class="modal-footer"> <button type="button" class="btn btn-outline-secondary"
+                (click)="closeModal()">Close</button> <button type="button" type="submit"
+                [disabled]="!messagegroupsForm.valid" class="btn btn-outline-primary">Save
+                changes</button></div>
+
+        </form>
+      </div>
+  </div>
+</div>

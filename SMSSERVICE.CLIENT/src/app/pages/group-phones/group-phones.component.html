@@ -1,0 +1,160 @@
+<!-- <div class="page-header" *ngIf="allowedRoles(['Admin'])"
+>
+  <div class="page-block">
+      <div class="row align-items-center">
+          <div class="col-md-12">
+              <div class="page-header-title">
+                  <h5 class="m-b-10">
+                    <div class="form-floating mb-3">
+                      <select class='selectoption'
+                          #mySelect
+                          (change)='getGroup(mySelect.value)'
+                          >
+                          <option class='option'
+                            *ngFor='let options of organizationSelectList'
+                            [value]="options.value">{{options.label}}</option>
+                      </select>
+
+
+
+                      <select class="form-control"
+                        #mySelect1
+                        (change)='getGroupPhones(mySelect1.value)'>
+                        <option class="option" *ngFor="let option of groupOptions" [value]="option.value">{{option.label}}</option>
+                      </select>
+
+
+                    </div>
+                  </h5>
+              </div>
+          </div>
+      </div>
+  </div>
+</div> -->
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+  <div class="col-9">
+    <div class="row">
+      <div class="col-md-4" *ngIf="allowedRoles(['Admin'])">
+        <div class="form-floating mb-3">
+          <select class='form-control' [(ngModel)]="selectedOrganization" #mySelect (change)='getGroup(mySelect.value)'>
+            <option class='option' *ngFor='let options of organizationSelectList' [value]="options.value">
+              {{options.label}}</option>
+          </select>
+          <label for="floatingInput">Organizations</label>
+        </div>
+      </div>
+      <div class="col-md-4" [hidden]="!isFirstSelectOptionSelected">
+        <div class="form-floating mb-3">
+          <select class="form-control" [(ngModel)]="selectedGroup" #mySelect1
+            (change)='getGroupPhonez(mySelect1.value)'>
+            <option class="option" *ngFor="let option of groupOptions" [value]="option.value">{{option.label}}</option>
+
+          </select>
+          <label for="floatingInput">Groups</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div class="main-body p-2">
+  <div class="card">
+
+
+    <div class="card-header">
+      <div class="row">
+        <div class="col-lg-6 text-start p-2">
+          <button type="button" class="btn btn-outline-primary" (click)="openFilePicker()">
+            <i class="pi pi-upload me-1"></i>
+            Import From Excel</button>
+            <input #fileInput (change)="onUpload($event)" type="file" style="display: none;" accept=".xlsx, .xls, application/vnd.ms-excel" />
+        </div>
+
+      <div class="col-lg-6 text-end p-2">
+        <button type="button" class="btn btn-outline-primary" (click)="addGroup()">
+          <i class="pi pi-user-plus me-1"></i>
+          Group Phones</button>
+      </div>
+
+
+
+    </div>
+
+    </div>
+
+    <div class="card-body">
+
+      <p-table [value]="groupphones" [tableStyle]="{ 'min-width': '50rem' }">
+
+        <ng-template pTemplate="header">
+          <tr>
+            <th>#</th>
+            <th>Group</th>
+            <th>Full Name</th>
+            <th>Phone Number</th>
+            <th>Remark</th>
+            <th></th>
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-groupphone let-i="rowIndex">
+          <tr class="table-row">
+
+            <td>{{i+1}}</td>
+            <td> {{groupphone.messageGroup}} </td>
+            <td> {{groupphone.fullName}} </td>
+
+            <td> {{groupphone.phoneNumber}} </td>
+            <td> {{groupphone.remark}} </td>
+            <td>
+              <button type="button" class="btn btn-outline-warning" (click)="updateGroupPhone(groupphone)"><i class="pi pi-pencil me-1"></i>
+              </button>
+            </td>
+
+
+
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" >
+
+          <tr *ngIf="selectedOrganization === null">
+            <td colspan="8" style="text-align:center;">Please Select Organization</td>
+        </tr>
+        <tr *ngIf="selectedGroup === null" [hidden]="!isFirstSelectOptionSelected">
+          <td colspan="8" style="text-align:center;">Please Select Group</td>
+      </tr>
+      <tr *ngIf="selectedOrganization !== null && selectedGroup !== null">
+        <td colspan="8" style="text-align:center;" >No Messages Found.</td>
+    </tr>
+      </ng-template>
+
+      <ng-template pTemplate="loadingbody">
+          <tr>
+              <td colspan="8">Loading Message Data. Please Wait.</td>
+          </tr>
+      </ng-template>
+
+      </p-table>
+
+    </div>
+  </div>
+</div>

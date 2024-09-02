@@ -1,0 +1,75 @@
+<div class="main-body p-2">
+  <div class="card">
+      <div class="card-header">
+
+      </div>
+      <div class="card-body">
+
+          <p-table [value]="unsentmessages" [tableStyle]="{ 'min-width': '50rem' }">
+
+              <ng-template pTemplate="header">
+                  <tr>
+                      <th>#</th>
+                      <th>Organization</th>
+                      <th>Group</th>
+                      <th>Message</th>
+
+                      <th>Language</th>
+                      <th>Number Of Customers</th>
+                      <!-- <th>Sent Time</th> -->
+                      <th>Text Size</th>
+                      <th>Status</th>
+                      <!-- <th>Approved Status</th> -->
+                      <th></th>
+
+
+
+                  </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-unsentmessage let-i="rowIndex">
+                  <tr class="table-row">
+
+                      <td>{{i+1}}</td>
+                      <td> {{unsentmessage.organizationName}} </td>
+                      <td> {{unsentmessage.messageGroup}} </td>
+                      <td> {{unsentmessage.content}} </td>
+
+                      <td> {{unsentmessage.language}} </td>
+                      <td> {{unsentmessage.numberOfCustomer}} </td>
+                      <!-- <td> {{ sendmessage.language }} </td> -->
+                      <td> {{unsentmessage.textSize}} </td>
+                      <td> {{unsentmessage.messageStatus}} </td>
+                      <!-- <td> {{unsentmessage.isApproved}} </td> -->
+                      <td>
+                        <button type="button" class="btn btn-outline-warning" ><i
+                          class="pi pi-check text-success" style="padding: 0px;  "></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-warning" (click)="rejectMessage()" ><i
+                          class="pi pi-times text-danger"></i>
+                        </button>
+                      </td>
+
+
+
+                  </tr>
+              </ng-template>
+
+
+
+              <ng-template pTemplate="emptymessage" >
+                <tr>
+                    <td colspan="8" style="text-align:center;" >No Messages Found.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Loading Message Data. Please Wait.</td>
+                </tr>
+            </ng-template>
+
+
+          </p-table>
+
+      </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+.table-row:hover {
+    background-color: #f6f9ff;
+    cursor: pointer;
+}
+.employee-details {
+    display: flex;
+    align-items: center;
+  }
+  
+  .employee-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+  }
+  
+  .employee-name {
+   
+    text-align: right;
+  }
+  
+  .employee-code {
+   color:gray;
+   font-size: 0.74rem;
+  }
+
+  .table-container{
+    padding: 10px;
+    border-radius: 20px;
+    border: 2px solid #f6f9ff;
+  }
+
+
