@@ -15,24 +15,24 @@ export class AddOrganizationComponent implements OnInit {
 
 
   imagePath: any
-  fileGH!:File
+  fileGH!: File
   user !: UserView
 
   selectedState: any = null;
 
   OrganizationForm!: FormGroup;
   organizationStatusDropDownItems = [
-    { name: 'ACTIVE', code: 'ACTIVE'},
-    { name: 'INACTIVE', code: 'INACTIVE'}
+    { name: 'ACTIVE', code: 'ACTIVE' },
+    { name: 'INACTIVE', code: 'INACTIVE' }
   ]
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
     private messageService: MessageService,
-    private activeModal : NgbActiveModal,
+    private activeModal: NgbActiveModal,
     private orgService: OrganizationService,
-    ) { }
+  ) { }
 
   ngOnInit(): void {
 
@@ -63,7 +63,7 @@ export class AddOrganizationComponent implements OnInit {
       formData.append("CreatedById", this.user.userId);
       formData.append("NameLocal", this.OrganizationForm.value.nameLocal);
       formData.append("OrganizationStatus", this.OrganizationForm.value.organizationStatus);
-      console.log(formData,this.fileGH);
+      console.log(formData, this.fileGH);
 
 
       this.orgService.addOrganiztion(formData).subscribe({
@@ -92,23 +92,48 @@ export class AddOrganizationComponent implements OnInit {
 
     }
     else {
-      this.messageService.add({ severity: 'error', summary: 'Form Submit failed.', detail: "Please fil required inputs !!" });
+      this.messageService.add({ severity: 'error', summary: 'Form Submit failed.', detail: "Please fill required inputs !!" });
     }
 
 
   }
+  // onUpload(event: any) {
+
+  //   var file: File = event.target.files[0];
+  //   this.fileGH = file
+  //   var myReader: FileReader = new FileReader();
+  //   myReader.onloadend = (e) => {
+  //     this.imagePath = myReader.result;
+  //   }
+  //   myReader.readAsDataURL(file);
+  // }
   onUpload(event: any) {
+    const file: File = event.target.files[0];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml'];
+    const maxSizeInMB = 5;
+    const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
 
-    var file: File = event.target.files[0];
-    this.fileGH = file
-    var myReader: FileReader = new FileReader();
-    myReader.onloadend = (e) => {
-      this.imagePath = myReader.result;
+    if (!allowedTypes.includes(file.type)) {
+      this.messageService.add({ severity: 'error', summary: 'Invalid file type.', detail: 'Only JPEG, PNG, and sanitized SVG files are allowed.' });
+      return;
     }
-    myReader.readAsDataURL(file);
+
+    if (file.size > maxSizeInBytes) {
+      this.messageService.add({ severity: 'error', summary: 'File too large.', detail: `Maximum file size is ${maxSizeInMB}MB.` });
+      return;
+    }
+
+    this.fileGH = file;
+    const reader = new FileReader();
+    reader.onloadend = (e) => {
+      this.imagePath = reader.result;
+    };
+    reader.readAsDataURL(file);
   }
 
-  closeModal(){
+
+
+  closeModal() {
 
     this.activeModal.close()
   }

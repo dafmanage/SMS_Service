@@ -33,12 +33,12 @@ export class CommonService {
     return { day: days, hour: hours, minute: minutes, second: seconds };
   }
 
-  getPdf (path : string ):any{
-   
-    var url = this.baseUrlPdf + "/pdf?path="+path 
-    
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url)
-  }
+  // getPdf (path : string ):any{
+
+  //   var url = this.baseUrlPdf + "/pdf?path="+path
+
+  //   return this.sanitizer.bypassSecurityTrustResourceUrl(url)
+  // }
 
 
   getCurrentLocation() {
@@ -74,14 +74,14 @@ export class CommonService {
   calculateAge(birthdate: Date): number {
     const today = new Date();
     const birthDate = new Date(birthdate);
-  
+
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-  
+
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-  
+
     return age;
   }
   calculateDate(fromDate:Date,toDate:Date): number {
@@ -90,17 +90,17 @@ export class CommonService {
     // Parse the date strings into Date objects
     const fromDateObj = new Date(fromDate);
     const toDateObj = new Date(toDate);
-  
+
     // Convert the dates to UTC to handle potential timezone differences
     const fromTime = Date.UTC(fromDateObj.getUTCFullYear(), fromDateObj.getUTCMonth(), fromDateObj.getUTCDate());
     const toTime = Date.UTC(toDateObj.getUTCFullYear(), toDateObj.getUTCMonth(), toDateObj.getUTCDate());
-  
+
     // Calculate the difference in milliseconds
     const differenceMs = Math.abs(toTime - fromTime);
-  
+
     // Convert the difference to days
     const differenceDays = Math.floor(differenceMs / millisecondsPerDay);
-  
+
     return differenceDays;
   }
 
@@ -110,7 +110,7 @@ export class CommonService {
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     const day = ("0" + date.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
-    
+
   }
 
 

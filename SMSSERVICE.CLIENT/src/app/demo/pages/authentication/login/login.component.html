@@ -16,21 +16,21 @@
           </div>
 
 
-          <form [formGroup]="loginForm"  >
+          <form [formGroup]="loginForm" autocomplete="off" >
             <div class="form-floating mb-3">
-              <input type="email" class="form-control" formControlName="userName" id="floatingInput" value="info@codedthemes.com" />
+              <input type="email" class="form-control" formControlName="userName" id="floatingInput" value="info@codedthemes.com" autocomplete="off" />
               <label for="floatingInput">Email address / Username</label>
             </div>
             <div class="form-floating mb-3">
-              <input type="password" class="form-control" formControlName="password" id="password" value="12345" />
+              <input type="password" class="form-control" formControlName="password" id="password" value="12345" autocomplete="off"/>
               <label for="password">Password</label>
             </div>
             <div class="d-flex mt-1 justify-content-between">
-              <div class="form-check">
-                <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="" />
+              <!-- <div class="form-check">
+                <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked=""  />
                 <label class="form-check-label text-muted" for="customCheckc1">Remember me</label>
-              </div>
-              <h5 class="text-secondary">
+              </div> -->
+              <h5 class="text-secondary ms-auto">
                 <a href="javascript:">Forgot Password?</a>
               </h5>
             </div>

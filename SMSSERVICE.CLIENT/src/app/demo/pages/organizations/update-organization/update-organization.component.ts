@@ -136,16 +136,27 @@ export class UpdateOrganizationComponent implements OnInit {
 
   }
   onUpload(event: any) {
+    const file: File = event.target.files[0];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/svg+xml'];
+    const maxSizeInMB = 5;
+    const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
 
-    debugger
-    var file: File = event.target.files[0];
-
-    this.fileGH = file
-    var myReader: FileReader = new FileReader();
-    myReader.onloadend = (e) => {
-      this.imagePath = myReader.result;
+    if (!allowedTypes.includes(file.type)) {
+      this.messageService.add({ severity: 'error', summary: 'Invalid file type.', detail: 'Only JPEG, PNG, and sanitized SVG files are allowed.' });
+      return;
     }
-    myReader.readAsDataURL(file);
+
+    if (file.size > maxSizeInBytes) {
+      this.messageService.add({ severity: 'error', summary: 'File too large.', detail: `Maximum file size is ${maxSizeInMB}MB.` });
+      return;
+    }
+
+    this.fileGH = file;
+    const reader = new FileReader();
+    reader.onloadend = (e) => {
+      this.imagePath = reader.result;
+    };
+    reader.readAsDataURL(file);
   }
 
   getImage(url:string){
