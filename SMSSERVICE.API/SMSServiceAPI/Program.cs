@@ -102,6 +102,13 @@ builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
+//app.Use(async (context, next) =>
+//{
+//    context.Response.Headers.Remove("Server");
+//    context.Response.Headers.Remove("X-Powered-By");
+//    context.Response.Headers.Remove("X-AspNet-Version");
+//    await next();
+//});
 app.UseDeveloperExceptionPage();
 
 // Configure the HTTP request pipeline.
@@ -130,5 +137,4 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseAuthentication();
 
 app.MapControllers();
-
 app.Run();

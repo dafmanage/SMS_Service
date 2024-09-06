@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
 import { ChangePasswordModel, User, UserList, UserPost, UserView } from 'src/models/auth/userDto';
 import { ResponseMessage, SelectList } from 'src/models/ResponseMessage.Model';
@@ -15,6 +15,8 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
   readonly BaseURI = environment.baseUrl;
+
+
 
 
   comparePasswords(fb: FormGroup) {
@@ -36,6 +38,9 @@ export class UserService {
 
   login(formData: User) {
     return this.http.post<ResponseMessage>(this.BaseURI + '/Authentication/Login', formData);
+  }
+  public getToken(): string | null {
+    return sessionStorage.getItem('token');
   }
 
 
@@ -135,4 +140,5 @@ export class UserService {
   // getSystemUsers() {
   //   return this.http.get<Employee[]>(this.BaseURI + "/Authentication/users")
   // }
+
 }
