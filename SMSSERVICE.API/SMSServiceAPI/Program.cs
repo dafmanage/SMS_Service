@@ -13,41 +13,45 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddCors(policyBuilder =>
     policyBuilder.AddDefaultPolicy(policy =>
-        policy.WithOrigins("*").AllowAnyHeader().AllowAnyHeader())
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials())  // Allow credentials
 );
 
-//builder.Services.AddCors();
-builder.Services.AddControllers().AddJsonOptions(
-    options =>
-    {
-        options.JsonSerializerOptions.PropertyNamingPolicy = null;
-    });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Configure JSON serialization options
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    options.JsonSerializerOptions.DictionaryKeyPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+});
+
+
+
+// Configure Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.Configure<ApplicationSetting>(builder.Configuration.GetSection("ApplicationSetting"));
 
+// Configure database
 var connectionString = builder.Configuration["ConnectionStrings:SqlConnection"];
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-           options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString));
 
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection")));
-
-builder.Services.AddIdentity<ApplicationUser,IdentityRole>()
+// Configure Identity
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
+// Configure SignalR
 builder.Services.AddSignalR();
 
-
-
+// Configure Identity options
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireDigit = false;
@@ -55,8 +59,12 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireLowercase = false;
     options.Password.RequireUppercase = false;
     options.Password.RequiredLength = 4;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
 });
 
+// Configure form options
 builder.Services.Configure<FormOptions>(o =>
 {
     o.ValueLengthLimit = int.MaxValue;
@@ -64,19 +72,19 @@ builder.Services.Configure<FormOptions>(o =>
     o.MemoryBufferThreshold = int.MaxValue;
 });
 
-
-builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
-
-builder.Services.AddMvc().AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase);
-builder.Services.AddCoreBusiness();
-
+// Configure AutoMapper and other services
 builder.Services.AddAutoMapper(typeof(AutoMapperConfigurations));
+builder.Services.AddCoreBusiness();
+builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddAuthorization(options =>
+          {
+              options.AddPolicy("ValidToken", policy =>
+                  policy.Requirements.Add(new TokenBlacklistRequirement()));
+          });
 
-//Jwt Authentication
-
+// Configure JWT authentication
 var key = Encoding.UTF8.GetBytes(builder.Configuration["ApplicationSetting:JWT_Secret"].ToString());
-
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -86,7 +94,7 @@ builder.Services.AddAuthentication(x =>
 {
     x.RequireHttpsMetadata = false;
     x.SaveToken = false;
-    x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    x.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
@@ -96,30 +104,25 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
-
+// Add necessary services
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddDistributedMemoryCache();
 
 var app = builder.Build();
-app.UseDeveloperExceptionPage();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Integrated Digital Platforms"); c.InjectStylesheet("/swagger-ui/SwaggerDark.css"); });
-
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Integrated Digital Platforms");
+        c.InjectStylesheet("/swagger-ui/SwaggerDark.css");
+    });
 }
-app.UseHttpsRedirection();
 
-app.UseCors(cors =>
-           cors.WithOrigins("*")
-           .AllowAnyHeader()
-           .AllowAnyMethod()
-           );
-app.UseStaticFiles();
-app.UseRouting();
+app.UseHttpsRedirection();
 
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -127,8 +130,19 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = new PathString("/wwwroot")
 });
 
-app.UseAuthentication();
+app.UseRouting();
 
-app.MapControllers();
+// CORS configuration must be placed before authentication and authorization middleware
+app.UseCors();
+
+// Authentication and Authorization middleware
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<NotificationHub>("/notificationHub");
+});
 
 app.Run();

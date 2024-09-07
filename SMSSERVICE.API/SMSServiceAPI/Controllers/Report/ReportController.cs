@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using IntegratedInfrustructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace SMSServiceAPI.Controllers.Report
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "ValidToken")]
     public class ReportController : ControllerBase
     {
         private readonly IReport report;

@@ -2,6 +2,7 @@
 using IntegratedImplementation.DTOS.HRM;
 using IntegratedImplementation.Interfaces.HRM;
 using IntegratedImplementation.Services.HRM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMSServiceImplementation.DTOS.Message;
@@ -12,6 +13,7 @@ namespace SMSServiceAPI.Controllers.Message
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "ValidToken")]
     public class MessageGroupController : ControllerBase
     {
         IMessageGroupService _MessageGroupService;

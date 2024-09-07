@@ -19,7 +19,7 @@ import { SharedModule } from './theme/shared/shared.module';
 import { ConfigurationComponent } from './theme/layout/admin/configuration/configuration.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { AuthHeaderIneterceptor } from './http-interceptors/auth-header-interceptor';
+import { AuthInterceptor } from './http-interceptors/auth-header-interceptor';
 import { MessageService } from 'primeng/api';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { ToastModule } from 'primeng/toast';
@@ -83,7 +83,7 @@ import { ReportComponent } from './pages/report/report/report.component';
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
-            useClass: AuthHeaderIneterceptor,
+            useClass: AuthInterceptor,
             multi: true,
         },
         MessageService,

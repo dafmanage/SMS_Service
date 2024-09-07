@@ -6,6 +6,8 @@ using Implementation.Helper;
 using System.Net;
 using IntegratedInfrustructure.Model.Authentication;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Microsoft.Extensions.Caching.Distributed;
 
 
 namespace ERPSystems.Controllers.Authentication
@@ -16,11 +18,17 @@ namespace ERPSystems.Controllers.Authentication
     {
         IAuthenticationService _authenticationService;
 
+        private SignInManager<ApplicationUser> _signInManager;
+        private readonly IDistributedCache _cache;
 
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationService authenticationService, SignInManager<ApplicationUser> signInManager,
+            IDistributedCache cache)
         {
             _authenticationService = authenticationService;
+            _signInManager = signInManager;
+            _cache = cache;
+
         }
 
         /// <summary>
@@ -34,7 +42,7 @@ namespace ERPSystems.Controllers.Authentication
         {
             if (ModelState.IsValid)
             {
-               return Ok (await _authenticationService.Login(loginDto));
+                return Ok(await _authenticationService.Login(loginDto));
             }
             else
             {
@@ -43,11 +51,31 @@ namespace ERPSystems.Controllers.Authentication
         }
 
 
+        [HttpPost]
+        public async Task<ActionResult<ResponseMessage>> Logout()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != null)
+            {
+                await _cache.RemoveAsync($"UserSession_{userId}");
+                // Remove the old session from the cache
+
+            }
+            await _signInManager.SignOutAsync();
+            return Ok(new ResponseMessage
+            {
+                Success = true,
+                ErrorCode = 0,
+                Message = "Logged out successfully"
+            });
+        }
+
+
         [HttpGet]
         [ProducesResponseType(typeof(UserListDto), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetUserList()
         {
-           return Ok(await _authenticationService.GetUserList());
+            return Ok(await _authenticationService.GetUserList());
         }
 
         [HttpGet]

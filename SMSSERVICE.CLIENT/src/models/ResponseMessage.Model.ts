@@ -2,6 +2,7 @@ export interface ResponseMessage{
     success : boolean;
     message: string;
     data: any;
+    errorCode:number
 }
 
 export interface SelectList {

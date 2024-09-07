@@ -1,7 +1,7 @@
 ﻿using Implementation.Helper;
 
 using IntegratedImplementation.Interfaces.Configuration;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -9,6 +9,7 @@ namespace IntegratedDigitalAPI.Controllers.Configuration
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "ValidToken")]
     public class ConfigurationController : ControllerBase
     {
         IGeneralConfigService _generalConfigService;

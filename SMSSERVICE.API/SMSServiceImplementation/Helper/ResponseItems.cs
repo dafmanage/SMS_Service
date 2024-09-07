@@ -10,6 +10,10 @@ namespace Implementation.Helper
     {
         public bool Success { get; set; }
         public string Message { get; set; } = null!;
+
+        public int ErrorCode {get;set;}
+
+        
         public object Data { get; set; } = null!;
     }
 

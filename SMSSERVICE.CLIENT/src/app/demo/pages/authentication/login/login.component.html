@@ -8,17 +8,32 @@
           </a>
           <div class="row">
             <div class="d-flex justify-content-center">
-              <div class="auth-header">
-                <h2 class="text-secondary "><b>Hi, Welcome Back</b></h2>
-                <p class="fs-4 mt-2">SMS Service</p>
+              <div class="auth-header text-center">
+                <h2 class="text-secondary"><b>Hi, Welcome Back</b></h2>
+                <p class="fs-6 mt-2">SMS Service</p>
+
+                <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                  <div class="d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong>{{ errorMessage }}</strong>
+                  </div>
+                </div>
+
+
+                <div *ngIf="showForceLogoutPrompt" class="mb-4">
+                  <p>You are already logged in on another device. Do you want to log out from other sessions?</p>
+                  <button (click)="onForceLogout()" class="btn btn-success">Yes, log me in</button> &nbsp;
+                  <button (click)="cancelLogin()" class="btn btn-danger">No, cancel login</button>
+                </div>
               </div>
             </div>
           </div>
 
 
-          <form [formGroup]="loginForm"  >
+          <form [formGroup]="loginForm" *ngIf="!showForceLogoutPrompt">
             <div class="form-floating mb-3">
-              <input type="email" class="form-control" formControlName="userName" id="floatingInput" value="info@codedthemes.com" />
+              <input type="email" class="form-control" formControlName="userName" id="floatingInput"
+                value="info@codedthemes.com" />
               <label for="floatingInput">Email address / Username</label>
             </div>
             <div class="form-floating mb-3">
@@ -30,13 +45,11 @@
                 <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="" />
                 <label class="form-check-label text-muted" for="customCheckc1">Remember me</label>
               </div>
-              <h5 class="text-secondary">
-                <a href="javascript:">Forgot Password?</a>
-              </h5>
+          
             </div>
             <div class="d-grid mt-4">
 
-              <button type="button" type="submit" (click)="login()" class="btn btn-secondary">Sign In</button>
+              <button type="button" type="submit" [disabled]="remainingTime!=0" (click)="onSubmit()" class="btn btn-secondary">Sign In</button>
             </div>
             <hr />
             <h5 class="d-flex justify-content-center">

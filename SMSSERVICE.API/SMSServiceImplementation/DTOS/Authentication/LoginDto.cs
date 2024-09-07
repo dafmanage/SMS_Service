@@ -14,5 +14,7 @@ namespace Implementation.DTOS.Authentication
 
         [Required]
         public string Password { get; set; } = null!;
+
+        public bool ForceLogout { get; set; }
     }
 }

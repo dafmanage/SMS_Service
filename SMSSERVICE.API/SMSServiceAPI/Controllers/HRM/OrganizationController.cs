@@ -2,6 +2,7 @@
 using IntegratedImplementation.DTOS.Configuration;
 using IntegratedImplementation.DTOS.HRM;
 using IntegratedImplementation.Interfaces.HRM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -10,6 +11,7 @@ namespace IntegratedDigitalAPI.Controllers.HRM
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "ValidToken")]
     public class OrganizationController : ControllerBase
     {
         IOrganizationService _organizationService;

@@ -1,4 +1,5 @@
 ﻿using Implementation.Helper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SMSServiceImplementation.DTOS.Message;
@@ -9,6 +10,7 @@ namespace SMSServiceAPI.Controllers.Message
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(Policy = "ValidToken")]
     public class GroupPhoneController : ControllerBase
     {
         IGroupPhoneService _GroupPhoneService;

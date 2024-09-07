@@ -4,9 +4,12 @@ using IntegratedImplementation.Interfaces.Configuration;
 using IntegratedImplementation.Interfaces.HRM;
 using IntegratedImplementation.Services.Configuration;
 using IntegratedImplementation.Services.HRM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+using SMSServiceImplementation.Interfaces.Authentication;
 using SMSServiceImplementation.Interfaces.Message;
 using SMSServiceImplementation.Interfaces.Report;
+
 using SMSServiceImplementation.Services.Message;
 using SMSServiceImplementation.Services.Report;
 
@@ -18,14 +21,17 @@ namespace IntegratedImplementation.Datas
         {
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             //hrm services 
-         
+
             services.AddScoped<IGeneralConfigService, GeneralConfigService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IMessageGroupService, MessageGroupService>();
             services.AddScoped<IGroupPhoneService, GroupPhoneService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IReport, ReportService>();
-  
+            
+            services.AddScoped<IAuthorizationHandler, TokenBlacklistHandler>();
+
+          
             return services;
         }
     }

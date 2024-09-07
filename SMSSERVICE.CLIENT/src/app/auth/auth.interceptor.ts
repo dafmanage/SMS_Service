@@ -22,10 +22,11 @@ export class AuthInterceptor implements HttpInterceptor {
                     err => {
                         if (err.status == 401){
                             sessionStorage.removeItem('token');
-                            this.router.navigateByUrl('login');
+                            this.router.navigateByUrl('auth/login');
                         }
                         else if(err.status == 403)
-                        this.router.navigateByUrl('/forbidden');
+                            sessionStorage.removeItem('token');
+                        this.router.navigateByUrl('/auth/login');
                     }
                 )
             )
