@@ -60,9 +60,7 @@ export class GroupPhonesComponent implements OnInit{
 
     this.phnService.getGroupPhones(id).subscribe({
       next: (res) => {
-
         this.groupphones = res
-        console.log(this.groupphones)
 
       },
       error: (err) => {

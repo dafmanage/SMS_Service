@@ -44,10 +44,26 @@ namespace IntegratedImplementation.Services.HRM
             var id = Guid.NewGuid();
             var path = "";
 
+            //if (addorganization.Image != null)
+            //    path = _generalConfig.UploadFiles(addorganization.Image, id.ToString(), "organization").Result.ToString();
             if (addorganization.Image != null)
-                path = _generalConfig.UploadFiles(addorganization.Image, id.ToString(), "organization").Result.ToString();
+            {
+                if (!IsValidFileType(addorganization.Image))
+                {
+                    return new ResponseMessage
+                    {
+                        Message = "Invalid file type.",
+                        Success = false
+                    };
+                }
 
-      
+          
+          
+                    path = _generalConfig.UploadFiles(addorganization.Image, id.ToString(), "organization").Result.ToString();
+          
+            }
+
+
             addorganization.OrganizationStatus = EmploymentStatus.ACTIVE.ToString();
             Organization organization = new Organization
             {
@@ -76,18 +92,41 @@ namespace IntegratedImplementation.Services.HRM
                 Success = true
             };
         }
+        private bool IsValidFileType(IFormFile file)
+        {
+            var allowedTypes = new[] { "image/jpeg", "image/png", "image/svg+xml" };
+            return allowedTypes.Contains(file.ContentType);
+        }
+
+
+
 
         public async Task<ResponseMessage> Updateorganization(OrganizationGetDto addorganization)
         {
 
             var path = "";
 
+
             if (addorganization.Image != null)
+            {
+                if (!IsValidFileType(addorganization.Image))
+                {
+                    return new ResponseMessage
+                    {
+                        Message = "Invalid file type.",
+                        Success = false
+                    };
+                }
+
+
+
                 path = _generalConfig.UploadFiles(addorganization.Image, addorganization.Id.ToString(), "organization").Result.ToString();
 
+            }
 
 
-            
+
+
 
             var organization = _dbContext.Organizations.Find(addorganization.Id);
 
