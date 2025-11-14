@@ -21,3 +21,80 @@
   .b-brand:hover img {
     filter: brightness(150%);
   }
+
+.m-header {
+  .b-brand {
+    .logo-container {
+      .logo-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        border-radius: 8px;
+        color: white;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+      }
+
+      .logo-text {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .brand-name {
+          font-size: 16px;
+          font-weight: 700;
+          color: #1f2937;
+          line-height: 1.2;
+          letter-spacing: -0.025em;
+        }
+
+        .brand-subtitle {
+          font-size: 11px;
+          color: #6b7280;
+          font-weight: 500;
+          line-height: 1.2;
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .m-header {
+    .b-brand {
+      .logo-container {
+        .logo-text {
+          .brand-name {
+            font-size: 14px;
+          }
+          
+          .brand-subtitle {
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dark theme support
+[data-theme="dark"] {
+  .m-header {
+    .b-brand {
+      .logo-container {
+        .logo-text {
+          .brand-name {
+            color: #f9fafb;
+          }
+          
+          .brand-subtitle {
+            color: #9ca3af;
+          }
+        }
+      }
+    }
+  }
+}

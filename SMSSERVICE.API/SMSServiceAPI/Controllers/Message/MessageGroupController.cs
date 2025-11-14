@@ -58,5 +58,12 @@ namespace SMSServiceAPI.Controllers.Message
                 return BadRequest();
             }
         }
+
+        [HttpPost("create-sample-groups")]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> CreateSampleMessageGroups()
+        {
+            return Ok(await _MessageGroupService.CreateSampleMessageGroups());
+        }
     }
 }

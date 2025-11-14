@@ -12,6 +12,11 @@ namespace IntegratedInfrustructure.Model.Authentication
     {
         public Guid OrganizationId { get; set; }
         public RowStatus RowStatus { get; set; }
-     
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
+        public string? ImagePath { get; set; }
+        public bool IsActive { get; set; } = true;
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+        public DateTime? LastLoginDate { get; set; }
     }
 }

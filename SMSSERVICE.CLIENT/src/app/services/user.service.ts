@@ -41,7 +41,23 @@ initializeSignalRConnection(token: string): Promise<void> {
 
 
   forceLogout() {
-    sessionStorage.removeItem('token');
+    console.log('DEBUG: forceLogout() called - clearing session storage');
+    console.log('DEBUG: Call stack:', new Error().stack);
+    console.log('DEBUG: SessionStorage before clear:', Object.keys(sessionStorage));
+    
+    // Clear all session storage
+    sessionStorage.clear();
+    
+    console.log('DEBUG: SessionStorage after clear:', Object.keys(sessionStorage));
+    
+    // Clear any cached data
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => {
+          caches.delete(name);
+        });
+      });
+    }
     this.stopSignalRConnection();
     this.forceLogoutSubject.next();
   }
@@ -75,6 +91,16 @@ initializeSignalRConnection(token: string): Promise<void> {
 
   logout() {
     this.stopSignalRConnection();
+    // Clear session storage immediately
+    sessionStorage.clear();
+    // Clear any cached data
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => {
+          caches.delete(name);
+        });
+      });
+    }
     return this.http.post<ResponseMessage>(this.BaseURI + '/Authentication/Logout', {});
   }
 
@@ -83,31 +109,89 @@ initializeSignalRConnection(token: string): Promise<void> {
   // }
 
   roleMatch(allowedRoles: any): boolean {
+    console.log('DEBUG: roleMatch called with allowedRoles:', allowedRoles);
     var isMatch = false;
     var token = sessionStorage.getItem('token');
 
-    //var payLoad = token ? JSON.parse(window.atob(token!.split('.')[1])) : "";
-    var payLoad = {
-      userId: '7cd878f5-8d25-494d-899c-a9d46ebf12c9',
-      organizationId: '5e3167c2-a5ba-42b9-886c-1289d225f054',
-      name: 'DAFTech Social ICT Solution ዳፍቴክ ሶሻል',
-      photo: 'wwwroot\\Employee\\02956bca-dc74-4a9c-9591-95d8d86accc5.png',
-      role: 'Admin',
-      nbf: 1699022430,
-      exp: 1699026030,
-      iat: 1699022430
-    };
+    if (!token) {
+      console.log('DEBUG: No token found for role matching');
+      return false;
+    }
+    
+    console.log('DEBUG: Token found for role matching, length:', token.length);
 
-    var userRole: string[] = payLoad ? payLoad.role.split(',') : [];
-    allowedRoles.forEach((element: any) => {
-      if (userRole.includes(element)) {
-        isMatch = true;
+    try {
+      // Validate JWT token format (should have 3 parts separated by dots)
+      const tokenParts = token.split('.');
+      if (tokenParts.length !== 3) {
+        console.error('DEBUG: Invalid JWT token format - expected 3 parts, got:', tokenParts.length);
         return false;
-      } else {
-        return true;
       }
-    });
-    return isMatch;
+
+      // Decode the payload (middle part)
+      const payload = tokenParts[1];
+      
+      // Add padding if needed for base64 decoding
+      const paddedPayload = payload + '='.repeat((4 - payload.length % 4) % 4);
+      
+      // Try to decode the payload
+      let decodedPayload;
+      try {
+        // First try the standard atob
+        decodedPayload = window.atob(paddedPayload);
+      } catch (atobError) {
+        console.error('DEBUG: atob error in roleMatch:', atobError);
+        try {
+          // Try alternative decoding method
+          decodedPayload = atob(paddedPayload);
+        } catch (altError) {
+          console.error('DEBUG: Alternative decode also failed in roleMatch:', altError);
+          // Try URL-safe base64 decoding
+          const urlSafePayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+          const urlSafePadded = urlSafePayload + '='.repeat((4 - urlSafePayload.length % 4) % 4);
+          decodedPayload = window.atob(urlSafePadded);
+        }
+      }
+      
+      var payLoad = JSON.parse(decodedPayload);
+      console.log('DEBUG: Decoded payload:', payLoad);
+      
+      // Check for role claim (ASP.NET Core uses ClaimTypes.Role)
+      const roleClaim = payLoad['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payLoad.role;
+      
+      if (!payLoad || !roleClaim) {
+        console.log('DEBUG: No role found in payload');
+        console.log('DEBUG: Available claims:', Object.keys(payLoad));
+        return false;
+      }
+
+      var userRole: string[] = Array.isArray(roleClaim) ? roleClaim : roleClaim.split(',');
+      console.log('DEBUG: User roles:', userRole);
+      console.log('DEBUG: Allowed roles:', allowedRoles);
+      console.log('DEBUG: Role claim type:', typeof roleClaim);
+      console.log('DEBUG: Role claim value:', roleClaim);
+      
+      for (const element of allowedRoles) {
+        console.log(`DEBUG: Checking if user role includes: ${element}`);
+        if (userRole.includes(element)) {
+          isMatch = true;
+          console.log(`DEBUG: Match found for role: ${element}`);
+          break;
+        }
+      }
+      
+      console.log('DEBUG: Final role match result:', isMatch);
+      return isMatch;
+    } catch (error) {
+      console.error('DEBUG: Error decoding token:', error);
+      console.error('DEBUG: Token that failed:', token);
+      
+      // Clear invalid token
+      sessionStorage.removeItem('token');
+      console.log('DEBUG: Cleared invalid token from sessionStorage');
+      
+      return false;
+    }
   }
 
   getRoles() {
@@ -115,26 +199,91 @@ initializeSignalRConnection(token: string): Promise<void> {
   }
 
   getCurrentUser() {
+    console.log('DEBUG: getCurrentUser called');
+    console.log('DEBUG: SessionStorage keys:', Object.keys(sessionStorage));
+    console.log('DEBUG: SessionStorage token key exists:', sessionStorage.getItem('token') !== null);
+    
     var token = sessionStorage.getItem('token');
 
-    var payLoad = this.decodeJWT(token);
-
-    if (payLoad) {
-      var userValue = payLoad.payload;
-      let user: UserView = {
-        userId: userValue.userId,
-        fullName: userValue.name,
-        role: userValue.role.split(','),
-        organizationId: userValue.organizationId,
-        photo: userValue.photo
-      };
-
-      console.log('user', user);
-
-      return user;
+    if (!token) {
+      console.log('DEBUG: No token found for getCurrentUser');
+      console.log('DEBUG: SessionStorage content:', sessionStorage);
+      return null;
     }
 
-    return null;
+    console.log('DEBUG: Token length:', token.length);
+    console.log('DEBUG: Token preview:', token.substring(0, 50) + '...');
+
+    try {
+      // Validate JWT token format (should have 3 parts separated by dots)
+      const tokenParts = token.split('.');
+      if (tokenParts.length !== 3) {
+        console.error('DEBUG: Invalid JWT token format - expected 3 parts, got:', tokenParts.length);
+        return null;
+      }
+
+      // Decode the payload (middle part)
+      const payload = tokenParts[1];
+      console.log('DEBUG: Payload part:', payload);
+      
+      // Add padding if needed for base64 decoding
+      const paddedPayload = payload + '='.repeat((4 - payload.length % 4) % 4);
+      console.log('DEBUG: Padded payload:', paddedPayload);
+      
+      // Try to decode the payload
+      let decodedPayload;
+      try {
+        // First try the standard atob
+        decodedPayload = window.atob(paddedPayload);
+        console.log('DEBUG: Decoded payload string:', decodedPayload);
+      } catch (atobError) {
+        console.error('DEBUG: atob error:', atobError);
+        try {
+          // Try alternative decoding method
+          decodedPayload = atob(paddedPayload);
+          console.log('DEBUG: Alternative decode successful');
+        } catch (altError) {
+          console.error('DEBUG: Alternative decode also failed:', altError);
+          // Try URL-safe base64 decoding
+          const urlSafePayload = payload.replace(/-/g, '+').replace(/_/g, '/');
+          const urlSafePadded = urlSafePayload + '='.repeat((4 - urlSafePayload.length % 4) % 4);
+          decodedPayload = window.atob(urlSafePadded);
+          console.log('DEBUG: URL-safe decode successful');
+        }
+      }
+      
+      var payLoad = JSON.parse(decodedPayload);
+      console.log('DEBUG: Decoded payload for getCurrentUser:', payLoad);
+      
+      if (!payLoad) {
+        console.log('DEBUG: No payload found in token');
+        return null;
+      }
+
+      // Check for role claim (ASP.NET Core uses ClaimTypes.Role)
+      const roleClaim = payLoad['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payLoad.role;
+      const roles = roleClaim ? (Array.isArray(roleClaim) ? roleClaim : roleClaim.split(',')) : [];
+
+      let user: UserView = {
+        userId: payLoad.userId,
+        fullName: payLoad.name,
+        role: roles,
+        organizationId: payLoad.organizationId,
+        photo: payLoad.photo
+      };
+
+      console.log('DEBUG: getCurrentUser returning:', user);
+      return user;
+    } catch (error) {
+      console.error('DEBUG: Error decoding token in getCurrentUser:', error);
+      console.error('DEBUG: Token that failed:', token);
+      
+      // Clear invalid token
+      sessionStorage.removeItem('token');
+      console.log('DEBUG: Cleared invalid token from sessionStorage');
+      
+      return null;
+    }
   }
 
   decodeJWT(token) {
@@ -165,6 +314,9 @@ initializeSignalRConnection(token: string): Promise<void> {
   }
 
   getUserList() {
+    const token = this.getToken();
+    console.log('DEBUG: Token exists:', !!token);
+    console.log('DEBUG: Token value:', token ? token.substring(0, 20) + '...' : 'null');
     return this.http.get<UserList[]>(this.BaseURI + '/Authentication/GetUserList');
   }
 

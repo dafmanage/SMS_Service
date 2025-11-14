@@ -31,6 +31,10 @@ export class OrganizationService {
     return this.http.get<IOrganizationGetDto[]>(this.baseUrl + "/Organization/getorganizationsSelectList")
   }
 
+  getOrganizationsForUser(userId: string) {
+    return this.http.get<IOrganizationGetDto[]>(this.baseUrl + `/Organization/getOrganizationsForUser/${userId}`)
+  }
+
 
 
 }

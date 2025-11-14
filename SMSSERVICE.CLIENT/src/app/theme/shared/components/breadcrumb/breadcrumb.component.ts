@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 // project import
-import { NavigationItem } from '../../../layout/admin/navigation/navigation';
+import { NavigationService } from '../../../layout/admin/navigation/navigation';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -21,10 +21,10 @@ export class BreadcrumbComponent {
   // Constructor
   constructor(
     private _router: Router,
-    public nav: NavigationItem,
+    private navigationService: NavigationService,
     private titleService: Title
   ) {
-    this.navigation = this.nav.get();
+    this.navigation = this.navigationService.get();
     this.setBreadcrumb();
   }
 
@@ -124,6 +124,6 @@ export class BreadcrumbComponent {
       }
     });
     this.navigationList = result;
-    this.titleService.setTitle(title + ' | DAFTech Bill System');
+    this.titleService.setTitle(title + ' | A2P SMS Service');
   }
 }

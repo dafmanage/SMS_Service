@@ -1,0 +1,343 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Security Settings</h4>
+        <p class="card-subtitle">Configure security policies and authentication settings</p>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="securityForm" (ngSubmit)="saveSecuritySettings()">
+          
+          <!-- Password Policy Section -->
+          <div class="settings-section">
+            <h5 class="section-title">Password Policy</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Minimum Password Length <span class="text-danger">*</span></label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    formControlName="passwordMinLength"
+                    min="6" 
+                    max="20"
+                    placeholder="8"
+                  >
+                  <div class="text-danger" *ngIf="securityForm.get('passwordMinLength')?.invalid && securityForm.get('passwordMinLength')?.touched">
+                    Password length must be between 6 and 20 characters
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Password Expiry (days) <span class="text-danger">*</span></label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    formControlName="passwordExpiryDays"
+                    min="30" 
+                    max="365"
+                    placeholder="90"
+                  >
+                  <div class="text-danger" *ngIf="securityForm.get('passwordExpiryDays')?.invalid && securityForm.get('passwordExpiryDays')?.touched">
+                    Password expiry must be between 30 and 365 days
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      formControlName="requireUppercase"
+                      id="requireUppercase"
+                    >
+                    <label class="form-check-label" for="requireUppercase">
+                      Require Uppercase Letters
+                    </label>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      formControlName="requireLowercase"
+                      id="requireLowercase"
+                    >
+                    <label class="form-check-label" for="requireLowercase">
+                      Require Lowercase Letters
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      formControlName="requireNumbers"
+                      id="requireNumbers"
+                    >
+                    <label class="form-check-label" for="requireNumbers">
+                      Require Numbers
+                    </label>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      formControlName="requireSpecialChars"
+                      id="requireSpecialChars"
+                    >
+                    <label class="form-check-label" for="requireSpecialChars">
+                      Require Special Characters
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Account Lockout Section -->
+          <div class="settings-section">
+            <h5 class="section-title">Account Lockout Policy</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Max Login Attempts <span class="text-danger">*</span></label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    formControlName="maxLoginAttempts"
+                    min="3" 
+                    max="10"
+                    placeholder="5"
+                  >
+                  <div class="text-danger" *ngIf="securityForm.get('maxLoginAttempts')?.invalid && securityForm.get('maxLoginAttempts')?.touched">
+                    Max login attempts must be between 3 and 10
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Lockout Duration (minutes) <span class="text-danger">*</span></label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    formControlName="lockoutDuration"
+                    min="5" 
+                    max="60"
+                    placeholder="15"
+                  >
+                  <div class="text-danger" *ngIf="securityForm.get('lockoutDuration')?.invalid && securityForm.get('lockoutDuration')?.touched">
+                    Lockout duration must be between 5 and 60 minutes
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Session Management Section -->
+          <div class="settings-section">
+            <h5 class="section-title">Session Management</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Session Timeout (minutes) <span class="text-danger">*</span></label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    formControlName="sessionTimeout"
+                    min="5" 
+                    max="120"
+                    placeholder="15"
+                  >
+                  <div class="text-danger" *ngIf="securityForm.get('sessionTimeout')?.invalid && securityForm.get('sessionTimeout')?.touched">
+                    Session timeout must be between 5 and 120 minutes
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      formControlName="enableTwoFactor"
+                      id="enableTwoFactor"
+                    >
+                    <label class="form-check-label" for="enableTwoFactor">
+                      Enable Two-Factor Authentication
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Network Security Section -->
+          <div class="settings-section">
+            <h5 class="section-title">Network Security</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      formControlName="enableHttpsOnly"
+                      id="enableHttpsOnly"
+                    >
+                    <label class="form-check-label" for="enableHttpsOnly">
+                      Force HTTPS Only
+                    </label>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      formControlName="enableSecurityHeaders"
+                      id="enableSecurityHeaders"
+                    >
+                    <label class="form-check-label" for="enableSecurityHeaders">
+                      Enable Security Headers
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      formControlName="enableIpWhitelist"
+                      id="enableIpWhitelist"
+                    >
+                    <label class="form-check-label" for="enableIpWhitelist">
+                      Enable IP Whitelist
+                    </label>
+                  </div>
+                </div>
+                <div class="mb-3" *ngIf="securityForm.get('enableIpWhitelist')?.value">
+                  <label class="form-label">Allowed IP Addresses</label>
+                  <textarea 
+                    class="form-control" 
+                    formControlName="allowedIpAddresses"
+                    rows="3"
+                    placeholder="192.168.1.1&#10;10.0.0.0/8&#10;172.16.0.0/12"
+                  ></textarea>
+                  <small class="form-text text-muted">Enter one IP address or CIDR block per line</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rate Limiting Section -->
+          <div class="settings-section">
+            <h5 class="section-title">Rate Limiting</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      formControlName="enableRateLimiting"
+                      id="enableRateLimiting"
+                    >
+                    <label class="form-check-label" for="enableRateLimiting">
+                      Enable Rate Limiting
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Requests per Window <span class="text-danger">*</span></label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    formControlName="rateLimitRequests"
+                    min="10" 
+                    max="1000"
+                    placeholder="100"
+                  >
+                  <div class="text-danger" *ngIf="securityForm.get('rateLimitRequests')?.invalid && securityForm.get('rateLimitRequests')?.touched">
+                    Rate limit requests must be between 10 and 1000
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label">Rate Limit Window (seconds) <span class="text-danger">*</span></label>
+                  <input 
+                    type="number" 
+                    class="form-control" 
+                    formControlName="rateLimitWindow"
+                    min="1" 
+                    max="3600"
+                    placeholder="60"
+                  >
+                  <div class="text-danger" *ngIf="securityForm.get('rateLimitWindow')?.invalid && securityForm.get('rateLimitWindow')?.touched">
+                    Rate limit window must be between 1 and 3600 seconds
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      formControlName="enableAuditLog"
+                      id="enableAuditLog"
+                    >
+                    <label class="form-check-label" for="enableAuditLog">
+                      Enable Audit Logging
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <div class="d-flex gap-2">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary"
+                  [disabled]="isLoading || securityForm.invalid"
+                >
+                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                  {{ isLoading ? 'Saving...' : 'Save Security Settings' }}
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-secondary"
+                  (click)="resetForm()"
+                  [disabled]="isLoading"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

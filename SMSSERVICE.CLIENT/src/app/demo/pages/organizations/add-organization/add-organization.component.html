@@ -27,54 +27,68 @@
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
                           <input type="text" class="form-control" formControlName="organizationName" id="floatingInput"  />
-                          <span *ngIf="!OrganizationForm.get('organizationName').valid && OrganizationForm.get('organizationName').touched"></span>
-                          <label for="floatingInput">Organization Name</label>
+                          <div *ngIf="OrganizationForm.get('organizationName')?.invalid && OrganizationForm.get('organizationName')?.touched" class="text-danger small">
+                            <span *ngIf="OrganizationForm.get('organizationName')?.errors?.['required']">Organization name is required</span>
+                            <span *ngIf="OrganizationForm.get('organizationName')?.errors?.['minlength']">Minimum 2 characters required</span>
+                            <span *ngIf="OrganizationForm.get('organizationName')?.errors?.['maxlength']">Maximum 100 characters allowed</span>
+                          </div>
+                          <label for="floatingInput">Organization Name <span class="text-danger">*</span></label>
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
                           <input type="text" class="form-control" id="floatingInput" formControlName="nameLocal"  />
-                          <span *ngIf="!OrganizationForm.get('nameLocal').valid && OrganizationForm.get('nameLocal').touched"></span>
-                          <label for="floatingInput">Local Name</label>
+                          <div *ngIf="OrganizationForm.get('nameLocal')?.invalid && OrganizationForm.get('nameLocal')?.touched" class="text-danger small">
+                            <span *ngIf="OrganizationForm.get('nameLocal')?.errors?.['required']">Local name is required</span>
+                            <span *ngIf="OrganizationForm.get('nameLocal')?.errors?.['minlength']">Minimum 2 characters required</span>
+                            <span *ngIf="OrganizationForm.get('nameLocal')?.errors?.['maxlength']">Maximum 100 characters allowed</span>
+                          </div>
+                          <label for="floatingInput">Local Name <span class="text-danger">*</span></label>
                         </div>
                       </div>
                       <div class="col-md-4">
                           <div class="form-floating mb-3">
-                            <input type="text" class="form-control" formControlName="phoneNumber" id="floatingInput"  />
-                            <span *ngIf="!OrganizationForm.get('phoneNumber').valid && OrganizationForm.get('phoneNumber').touched"></span>
-                            <label for="floatingInput">Phone Number</label>
+                            <input type="tel" class="form-control" formControlName="phoneNumber" id="floatingInput" placeholder="+251 9XX XXX XXX" />
+                            <div *ngIf="OrganizationForm.get('phoneNumber')?.invalid && OrganizationForm.get('phoneNumber')?.touched" class="text-danger small">
+                              <span *ngIf="OrganizationForm.get('phoneNumber')?.errors?.['required']">Phone number is required</span>
+                              <span *ngIf="OrganizationForm.get('phoneNumber')?.errors?.['pattern']">Please enter a valid phone number</span>
+                            </div>
+                            <label for="floatingInput">Phone Number <span class="text-danger">*</span></label>
                           </div>
                         </div>
                     </div>
                     <div class="row">
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="floatingInput" formControlName="email"  />
-                          <span *ngIf="!OrganizationForm.get('email').valid && OrganizationForm.get('email').touched"></span>
-                          <label for="floatingInput">Email</label>
+                          <input type="email" class="form-control" id="floatingInput" formControlName="email" placeholder="organization@example.com" />
+                          <div *ngIf="OrganizationForm.get('email')?.invalid && OrganizationForm.get('email')?.touched" class="text-danger small">
+                            <span *ngIf="OrganizationForm.get('email')?.errors?.['required']">Email is required</span>
+                            <span *ngIf="OrganizationForm.get('email')?.errors?.['email']">Please enter a valid email address</span>
+                          </div>
+                          <label for="floatingInput">Email <span class="text-danger">*</span></label>
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-                          <input type="text" class="form-control" id="floatingInput" formControlName="address"  />
-                          <span *ngIf="!OrganizationForm.get('address').valid && OrganizationForm.get('address').touched"></span>
-                          <label for="floatingInput">Address</label>
+                          <input type="text" class="form-control" id="floatingInput" formControlName="address" placeholder="Street, City, Country" />
+                          <div *ngIf="OrganizationForm.get('address')?.invalid && OrganizationForm.get('address')?.touched" class="text-danger small">
+                            <span *ngIf="OrganizationForm.get('address')?.errors?.['required']">Address is required</span>
+                            <span *ngIf="OrganizationForm.get('address')?.errors?.['minlength']">Minimum 5 characters required</span>
+                            <span *ngIf="OrganizationForm.get('address')?.errors?.['maxlength']">Maximum 200 characters allowed</span>
+                          </div>
+                          <label for="floatingInput">Address <span class="text-danger">*</span></label>
                         </div>
                       </div>
                       <div class="col-md-4">
                         <div class="form-floating mb-3">
-
-
-                          <select class="form-control"  id="floatingInput"  formControlName="organizationStatus" aria-label="State">
-
+                          <select class="form-control" id="floatingInput" formControlName="organizationStatus" aria-label="Status">
+                              <option value="">Select Status</option>
                               <option *ngFor="let item of organizationStatusDropDownItems" [value]="item.code">{{item.name}}</option>
-
-
                           </select>
-                          <span *ngIf="!OrganizationForm.get('organizationStatus').valid && OrganizationForm.get('organizationStatus').touched">Please Select Status!</span>
-                          <label for="floatingInput">Status</label>
-
-
+                          <div *ngIf="OrganizationForm.get('organizationStatus')?.invalid && OrganizationForm.get('organizationStatus')?.touched" class="text-danger small">
+                            <span *ngIf="OrganizationForm.get('organizationStatus')?.errors?.['required']">Please select a status</span>
+                          </div>
+                          <label for="floatingInput">Status <span class="text-danger">*</span></label>
                         </div>
                       </div>
                     </div>
@@ -83,10 +97,12 @@
 
 
 
-                <div class="modal-footer"> <button type="button" class="btn btn-outline-secondary"
-                  (click)="closeModal()">Close</button> <button type="button" type="submit"
-                  [disabled]="!OrganizationForm.valid" class="btn btn-outline-primary">Save
-                  changes</button></div>
+                <div class="modal-footer"> 
+                  <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Close</button> 
+                  <button type="submit" [disabled]="!OrganizationForm.valid" class="btn btn-outline-primary">
+                    <i class="bi bi-save"></i> Save Organization
+                  </button>
+                </div>
 
           </form>
         </div>

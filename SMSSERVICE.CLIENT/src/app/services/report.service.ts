@@ -14,4 +14,26 @@ export class ReportService {
   getReport(id:string) {
     return this.http.get<IReportGetDto[]>(this.baseUrl + "/Report?messageGroupId=" + id)
   }
+
+  // Delivery Reports Methods
+  getDeliveryReports(filters: any) {
+    return this.http.get(`${this.baseUrl}/Report/delivery-reports`, { params: filters });
+  }
+
+  exportDeliveryReports(filters: any) {
+    return this.http.post(`${this.baseUrl}/Report/export-delivery-reports`, filters, { responseType: 'blob' });
+  }
+
+  // SMS Reports Methods
+  getSmsReports(filters: any) {
+    return this.http.get(`${this.baseUrl}/Report/sms-reports`, { params: filters });
+  }
+
+  exportSmsReports(filters: any) {
+    return this.http.post(`${this.baseUrl}/Report/export-sms-reports`, filters, { responseType: 'blob' });
+  }
+
+  getSmsStatistics(filters: any) {
+    return this.http.get(`${this.baseUrl}/Report/sms-statistics`, { params: filters });
+  }
 }

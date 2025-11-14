@@ -44,7 +44,7 @@
 <div class="row">
   <div class="col-9">
     <div class="row">
-      <div class="col-md-4" *ngIf="allowedRoles(['Admin'])">
+      <div class="col-md-4" *ngIf="showOrganizationFilter">
         <div class="form-floating mb-3">
           <select class='form-control' [(ngModel)]="selectedOrganization" #mySelect (change)='getGroup(mySelect.value)'>
             <option class='option' *ngFor='let options of organizationSelectList' [value]="options.value">
@@ -81,18 +81,27 @@
 
     <div class="card-header">
       <div class="row">
-        <div class="col-lg-6 text-start p-2">
+        <!-- Admin: Can import and add phone numbers -->
+        <div class="col-lg-6 text-start p-2" *ngIf="isAdmin">
           <button type="button" class="btn btn-outline-primary" (click)="openFilePicker()">
             <i class="pi pi-upload me-1"></i>
             Import From Excel</button>
             <input #fileInput (change)="onUpload($event)" type="file" style="display: none;" accept=".xlsx, .xls, application/vnd.ms-excel" />
         </div>
 
-      <div class="col-lg-6 text-end p-2">
-        <button type="button" class="btn btn-outline-primary" (click)="addGroup()">
-          <i class="pi pi-user-plus me-1"></i>
-          Group Phones</button>
-      </div>
+        <div class="col-lg-6 text-end p-2" *ngIf="isAdmin">
+          <button type="button" class="btn btn-outline-primary" (click)="addGroup()">
+            <i class="pi pi-user-plus me-1"></i>
+            Add Phone Numbers</button>
+        </div>
+
+        <!-- SuperAdmin: View only message -->
+        <div class="col-lg-12 text-center p-2" *ngIf="!isAdmin && showOrganizationFilter">
+          <div class="text-muted">
+            <i class="pi pi-info-circle me-1"></i>
+            Select an organization and group to view phone numbers (Read-only)
+          </div>
+        </div>
 
 
 
@@ -124,9 +133,14 @@
 
             <td> {{groupphone.phoneNumber}} </td>
             <td> {{groupphone.remark}} </td>
-            <td>
-              <button type="button" class="btn btn-outline-warning" (click)="updateGroupPhone(groupphone)"><i class="pi pi-pencil me-1"></i>
+            <td *ngIf="isAdmin">
+              <button type="button" class="btn btn-outline-warning" (click)="updateGroupPhone(groupphone)">
+                <i class="pi pi-pencil me-1"></i>
+                Edit
               </button>
+            </td>
+            <td *ngIf="!isAdmin">
+              <span class="text-muted"><i class="pi pi-eye me-1"></i>View Only</span>
             </td>
 
 

@@ -1,0 +1,223 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Delivery Status Reports</h4>
+        <p class="card-subtitle">Monitor SMS delivery status and performance metrics</p>
+      </div>
+      <div class="card-body">
+        
+        <!-- Filters Section -->
+        <div class="filters-section mb-4">
+          <form [formGroup]="filterForm">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label class="form-label">Status</label>
+                  <select class="form-control" formControlName="status">
+                    <option *ngFor="let option of statusOptions" [value]="option.value">
+                      {{ option.label }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label class="form-label">Start Date</label>
+                  <input 
+                    type="date" 
+                    class="form-control" 
+                    formControlName="startDate"
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label class="form-label">End Date</label>
+                  <input 
+                    type="date" 
+                    class="form-control" 
+                    formControlName="endDate"
+                  >
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label class="form-label">Phone Number</label>
+                  <input 
+                    type="tel" 
+                    class="form-control" 
+                    formControlName="phoneNumber"
+                    placeholder="Search by phone number"
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="d-flex gap-2">
+                  <button 
+                    type="button" 
+                    class="btn btn-primary"
+                    (click)="applyFilters()"
+                    [disabled]="isLoading"
+                  >
+                    Apply Filters
+                  </button>
+                  <button 
+                    type="button" 
+                    class="btn btn-secondary"
+                    (click)="clearFilters()"
+                    [disabled]="isLoading"
+                  >
+                    Clear Filters
+                  </button>
+                  <button 
+                    type="button" 
+                    class="btn btn-success"
+                    (click)="exportReports()"
+                    [disabled]="isLoading"
+                  >
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                    Export Excel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <div class="summary-card">
+              <div class="summary-icon">
+                <i class="ti ti-send"></i>
+              </div>
+              <div class="summary-content">
+                <h5>{{ sentCount }}</h5>
+                <p>Sent</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="summary-card">
+              <div class="summary-icon delivered">
+                <i class="ti ti-check"></i>
+              </div>
+              <div class="summary-content">
+                <h5>{{ deliveredCount }}</h5>
+                <p>Delivered</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="summary-card">
+              <div class="summary-icon failed">
+                <i class="ti ti-x"></i>
+              </div>
+              <div class="summary-content">
+                <h5>{{ failedCount }}</h5>
+                <p>Failed</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="summary-card">
+              <div class="summary-icon pending">
+                <i class="ti ti-clock"></i>
+              </div>
+              <div class="summary-content">
+                <h5>{{ pendingCount }}</h5>
+                <p>Pending</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reports Table -->
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Message ID</th>
+                <th>Phone Number</th>
+                <th>Message Content</th>
+                <th>Status</th>
+                <th>Sent Date</th>
+                <th>Delivered Date</th>
+                <th>Organization</th>
+                <th>Cost (ETB)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="isLoading">
+                <td colspan="8" class="text-center">
+                  <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="!isLoading && reports.length === 0">
+                <td colspan="8" class="text-center text-muted">
+                  No delivery reports found
+                </td>
+              </tr>
+              <tr *ngFor="let report of reports">
+                <td>{{ report.messageId }}</td>
+                <td>{{ report.phoneNumber }}</td>
+                <td class="message-content">
+                  <span [title]="report.messageContent">
+                    {{ report.messageContent | slice:0:50 }}{{ report.messageContent?.length > 50 ? '...' : '' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge" [ngClass]="getStatusBadgeClass(report.status)">
+                    {{ report.status | titlecase }}
+                  </span>
+                </td>
+                <td>{{ report.sentDate | date:'short' }}</td>
+                <td>{{ report.deliveredDate | date:'short' }}</td>
+                <td>{{ report.organizationName }}</td>
+                <td>{{ report.cost | currency:'ETB':'symbol':'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-section" *ngIf="totalRecords > pageSize">
+          <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="onPageChange(currentPage - 1)" href="javascript:void(0)">
+                  Previous
+                </a>
+              </li>
+              <li 
+                class="page-item" 
+                *ngFor="let page of getPageNumbers()"
+                [class.active]="page === currentPage"
+              >
+                <a class="page-link" (click)="onPageChange(page)" href="javascript:void(0)">
+                  {{ page }}
+                </a>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                <a class="page-link" (click)="onPageChange(currentPage + 1)" href="javascript:void(0)">
+                  Next
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <div class="pagination-info text-center">
+            <small class="text-muted">
+              Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalRecords) }} of {{ totalRecords }} records
+            </small>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -17,7 +17,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/default',
+        redirectTo: 'default',
         pathMatch: 'full'
       },
       {
@@ -66,8 +66,13 @@ const routes: Routes = [
         path: 'unsent', component:UnsentComponent
       },
       {
-        path: 'report', component:ReportComponent
-      }
+        path: 'message-approval',
+        loadComponent: () => import('./demo/pages/message-approval/message-approval.component').then(m => m.MessageApprovalComponent)
+      },
+      {
+        path: 'report',
+        loadChildren: () => import('./demo/pages/report/report.module').then((m) => m.ReportModule)
+      },
 
     ]
   },

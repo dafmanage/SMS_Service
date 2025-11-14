@@ -165,7 +165,12 @@ namespace IntegratedInfrustructure.Data
 
         public enum MessageStatus
         {
-            SENT,
+            Pending,
+            Approved,
+            Rejected,
+            Sent,
+            Failed,
+            Delivered,
             UNSENT
         }
 

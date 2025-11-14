@@ -9,38 +9,134 @@
         <div class="card-body">
 
 
-            <form class="" [formGroup]="userForm" (ngSubmit)="submit()">
+            <form class="" [formGroup]="userForm" (ngSubmit)="onSubmit()">
 
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-
-
                             <select class="form-control" formControlName="OrganizationId">
-
-                                <option>--Select Organization---</option>
-                                <option *ngFor="let organization of organizationList" [value]="organization.id">{{organization.name}}</option>
+                                <option value="">--Select Organization---</option>
+                                <option *ngFor="let organization of organizationList" [value]="organization.id">
+                                    {{organization.name}}
+                                </option>
                             </select>
-                            <label for="floatingInput">Organization</label>
+                            <div *ngIf="userForm.get('OrganizationId')?.invalid && userForm.get('OrganizationId')?.touched" class="text-danger small">
+                                <span *ngIf="userForm.get('OrganizationId')?.errors?.['required']">Please select an organization</span>
+                            </div>
+                            <label for="floatingInput">Organization <span class="text-danger">*</span></label>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
+                            <select class="form-control" formControlName="Role">
+                                <option value="">--Select Role---</option>
+                                <option *ngFor="let role of roleList" [value]="role.value">
+                                    {{role.label}}
+                                </option>
+                            </select>
+                            <div *ngIf="userForm.get('Role')?.invalid && userForm.get('Role')?.touched" class="text-danger small">
+                                <span *ngIf="userForm.get('Role')?.errors?.['required']">Please select a role</span>
+                            </div>
+                            <label for="floatingInput">Role <span class="text-danger">*</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" formControlName="FirstName" id="floatingInput" />
+                            <div *ngIf="userForm.get('FirstName')?.invalid && userForm.get('FirstName')?.touched" class="text-danger small">
+                                <span *ngIf="userForm.get('FirstName')?.errors?.['required']">First name is required</span>
+                            </div>
+                            <label for="floatingInput">First Name <span class="text-danger">*</span></label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" formControlName="LastName" id="floatingInput" />
+                            <div *ngIf="userForm.get('LastName')?.invalid && userForm.get('LastName')?.touched" class="text-danger small">
+                                <span *ngIf="userForm.get('LastName')?.errors?.['required']">Last name is required</span>
+                            </div>
+                            <label for="floatingInput">Last Name <span class="text-danger">*</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" formControlName="Email" id="floatingInput" />
+                            <div *ngIf="userForm.get('Email')?.invalid && userForm.get('Email')?.touched" class="text-danger small">
+                                <span *ngIf="userForm.get('Email')?.errors?.['required']">Email is required</span>
+                                <span *ngIf="userForm.get('Email')?.errors?.['email']">Please enter a valid email address</span>
+                            </div>
+                            <label for="floatingInput">Email <span class="text-danger">*</span></label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
+                            <input type="tel" class="form-control" formControlName="PhoneNumber" id="floatingInput" placeholder="0919870929 or +251919870929" />
+                            <div *ngIf="userForm.get('PhoneNumber')?.invalid && userForm.get('PhoneNumber')?.touched" class="text-danger small">
+                                <span *ngIf="userForm.get('PhoneNumber')?.errors?.['required']">Phone number is required</span>
+                                <span *ngIf="userForm.get('PhoneNumber')?.errors?.['pattern']">Please enter a valid Ethiopian phone number (e.g., 0919870929 or +251919870929)</span>
+                            </div>
+                            <label for="floatingInput">Phone Number <span class="text-danger">*</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating mb-3">
                             <input type="text" class="form-control" formControlName="UserName" id="floatingInput" />
-                            <label for="floatingInput">User Name</label>
+                            <div *ngIf="userForm.get('UserName')?.invalid && userForm.get('UserName')?.touched" class="text-danger small">
+                                <span *ngIf="userForm.get('UserName')?.errors?.['required']">Username is required</span>
+                            </div>
+                            <label for="floatingInput">User Name <span class="text-danger">*</span></label>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
                             <input type="password" class="form-control" id="floatingInput" formControlName="Password" />
-                            <label for="floatingInput">Password</label>
+                            <div *ngIf="userForm.get('Password')?.invalid && userForm.get('Password')?.touched" class="text-danger small">
+                                <span *ngIf="userForm.get('Password')?.errors?.['required']">Password is required</span>
+                                <span *ngIf="userForm.get('Password')?.errors?.['minlength']">Password must be at least 12 characters long</span>
+                            </div>
+                            <div *ngIf="userForm.get('Password')?.value" class="small mt-1">
+                                <div class="text-muted">Password requirements:</div>
+                                <ul class="list-unstyled small text-muted mb-0">
+                                    <li [class.text-success]="userForm.get('Password')?.value?.length >= 12" [class.text-danger]="userForm.get('Password')?.value?.length < 12">
+                                        ✓ At least 12 characters
+                                    </li>
+                                    <li [class.text-success]="hasUppercase()" [class.text-danger]="!hasUppercase()">
+                                        ✓ One uppercase letter
+                                    </li>
+                                    <li [class.text-success]="hasLowercase()" [class.text-danger]="!hasLowercase()">
+                                        ✓ One lowercase letter
+                                    </li>
+                                    <li [class.text-success]="hasNumber()" [class.text-danger]="!hasNumber()">
+                                        ✓ One number
+                                    </li>
+                                    <li [class.text-success]="hasSpecialChar()" [class.text-danger]="!hasSpecialChar()">
+                                        ✓ One special character
+                                    </li>
+                                </ul>
+                            </div>
+                            <label for="floatingInput">Password <span class="text-danger">*</span></label>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control" formControlName="ConfirmPassword"
-                                id="floatingInput" />
-                            <label for="floatingInput">Confirm Password</label>
+                            <input type="password" class="form-control" formControlName="ConfirmPassword" id="floatingInput" />
+                            <div *ngIf="userForm.get('ConfirmPassword')?.invalid && userForm.get('ConfirmPassword')?.touched" class="text-danger small">
+                                <span *ngIf="userForm.get('ConfirmPassword')?.errors?.['required']">Please confirm your password</span>
+                                <span *ngIf="userForm.get('ConfirmPassword')?.errors?.['passwordMismatch']">Passwords do not match</span>
+                            </div>
+                            <label for="floatingInput">Confirm Password <span class="text-danger">*</span></label>
                         </div>
                     </div>
                 </div>
@@ -48,10 +144,10 @@
 
 
 
-            <div class="modal-footer"> <button type="button" class="btn btn-outline-secondary"
-                    (click)="closeModal()">Close</button> <button type="button" type="submit"
-                    [disabled]="!userForm.valid"
-                    class="btn btn-outline-primary">Add user</button></div>
+            <div class="modal-footer"> 
+                <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Close</button> 
+                <button type="submit" [disabled]="!userForm.valid" class="btn btn-outline-primary">Add user</button>
+            </div>
                 </form>
         </div>
     </div>

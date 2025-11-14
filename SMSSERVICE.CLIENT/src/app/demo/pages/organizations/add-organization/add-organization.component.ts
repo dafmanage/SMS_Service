@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { OrganizationService } from 'src/app/services/organization.service';
 import { UserService } from 'src/app/services/user.service';
 import { UserView } from 'src/models/auth/userDto';
+import { ErrorHandlerUtil } from 'src/app/utils/error-handler.util';
 
 @Component({
   selector: 'app-add-organization',
@@ -39,11 +40,11 @@ export class AddOrganizationComponent implements OnInit {
     this.user = this.userService.getCurrentUser()
 
     this.OrganizationForm = this.formBuilder.group({
-      organizationName: [null, Validators.required],
-      phoneNumber: [null, Validators.required],
-      email: [null, Validators.required],
-      address: ['', Validators.required],
-      nameLocal: ['', Validators.required],
+      organizationName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^[\+]?[0-9\s\-\(\)]{7,20}$/)]],
+      email: ['', [Validators.required, Validators.email]],
+      address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]],
+      nameLocal: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
       organizationStatus: ['', Validators.required]
 
     });
@@ -79,12 +80,19 @@ export class AddOrganizationComponent implements OnInit {
 
           }
           else {
-            this.messageService.add({ severity: 'error', summary: 'Something went Wrong', detail: res.message });
+            // Handle validation errors properly
+            let errorMessage = res.message;
+            if (res.data && Array.isArray(res.data)) {
+              errorMessage = res.data.join(', ');
+            }
+            this.messageService.add({ severity: 'error', summary: 'Validation Error', detail: errorMessage });
 
           }
 
         }, error: (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Something went Wrong', detail: err });
+          console.error('Organization creation error:', err);
+          const errorMessage = ErrorHandlerUtil.extractErrorMessage(err);
+          this.messageService.add({ severity: 'error', summary: 'Validation Error', detail: errorMessage });
         }
       })
 

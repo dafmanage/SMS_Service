@@ -21,4 +21,7 @@ export class MessageGroupService {
   updateMessageGroup(value : IMessagGroupPutDto){
     return this.http.put<ResponseMessage>(this.baseUrl + '/MessageGroup', value);
   }
+  createSampleMessageGroups() {
+    return this.http.post<ResponseMessage>(this.baseUrl + '/MessageGroup/create-sample-groups', {});
+  }
 }

@@ -33,11 +33,31 @@ namespace SMSServiceInfrustructure.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastLoginDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -375,6 +395,8 @@ namespace SMSServiceInfrustructure.Migrations
 
                     b.HasIndex("MessageGroupId");
 
+                    b.HasIndex("OrganizationId");
+
                     b.ToTable("Messages");
                 });
 
@@ -588,9 +610,17 @@ namespace SMSServiceInfrustructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("IntegratedInfrustructure.Model.HRM.Organization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("CreatedBy");
 
                     b.Navigation("MessageGroup");
+
+                    b.Navigation("Organization");
                 });
 
             modelBuilder.Entity("SMSServiceInfrustructure.Model.Message.MessageGroup", b =>

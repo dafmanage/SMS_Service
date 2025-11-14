@@ -13,8 +13,6 @@ namespace IntegratedInfrustructure.Model.HRM
 {
     public class Organization : WithIdModel
     {
-             
-       
         public string Name { get; set; } = null!;
         public string NameLocal { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
@@ -22,8 +20,7 @@ namespace IntegratedInfrustructure.Model.HRM
         public string? ImagePath { get; set; } = null!;
         public string Address { get; set; } = null!;     
         public OrganizationStatus OrganizationStatus { get; set; }
-       
-
+        public string CreatedById { get; set; } = null!; // Track who created this organization
     }
 
     

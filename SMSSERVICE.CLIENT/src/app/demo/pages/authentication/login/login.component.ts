@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { Subscription, interval } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
+import { BrowserSecurityService } from 'src/app/services/browser-security.service';
+import { SessionTimeoutService } from 'src/app/services/session-timeout.service';
 import { MessageService } from 'primeng/api';
 import { UserView } from 'src/models/auth/userDto';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -42,9 +44,11 @@ export default class LoginComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private router: Router,
     private userService: UserService,
+    private browserSecurity: BrowserSecurityService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private sessionTimeoutService: SessionTimeoutService
   ) {
     this.forceLogoutSubscription = this.userService.forceLogout$.subscribe(() => {
       this.handleForceLogout();
@@ -52,6 +56,9 @@ export default class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Add security headers to prevent caching
+    this.browserSecurity.addSecurityHeaders();
+    
     this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
       password: ['', Validators.required],
@@ -66,21 +73,54 @@ export default class LoginComponent implements OnInit, OnDestroy {
   login(forceLogout: boolean) {
     if (this.loginForm.valid) {
       this.loginForm.patchValue({ forceLogout: forceLogout });
+      console.log('DEBUG: Login form data:', this.loginForm.value);
+      console.log('DEBUG: Login API URL:', this.userService.BaseURI + '/Authentication/Login');
+      
       this.userService.login(this.loginForm.value).subscribe({
         next: (res) => {
+          console.log('DEBUG: Login response received:', res);
+          console.log('DEBUG: Response success:', res.success);
+          console.log('DEBUG: Response message:', res.message);
+          console.log('DEBUG: Response data:', res.data);
+          
           if (res.success) {
+            console.log('DEBUG: Login successful, token received:', res.data ? 'Present' : 'Missing');
+            console.log('DEBUG: Token length:', res.data ? res.data.length : 'N/A');
+            console.log('DEBUG: Token preview:', res.data ? res.data.substring(0, 50) + '...' : 'N/A');
+            console.log('DEBUG: Token parts count:', res.data ? res.data.split('.').length : 'N/A');
+            
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: res.message });
             sessionStorage.setItem('token', res.data);
-            this.userService.initializeSignalRConnection(res.data)
-            .then(() => {
-              this.hubConnection.on('ForceLogout', () => {
-                this.handleForceLogout();
+            console.log('DEBUG: Token stored in sessionStorage:', !!sessionStorage.getItem('token'));
+            console.log('DEBUG: Token value after storage:', sessionStorage.getItem('token'));
+            
+            // Start session tracking after successful login
+            this.sessionTimeoutService.startSessionTracking();
+            
+            // Temporarily disable SignalR to test navigation
+            // this.userService.initializeSignalRConnection(res.data)
+            // .then(() => {
+            //   this.hubConnection.on('ForceLogout', () => {
+            //     this.handleForceLogout();
+            //   });
+            // })
+            // .catch(err => {
+            //   console.error('Failed to initialize SignalR connection:', err);
+            // });
+            
+            console.log('DEBUG: Attempting navigation to /');
+            // Add a small delay to ensure token is properly stored
+            setTimeout(() => {
+              this.router.navigateByUrl('/').then(success => {
+                console.log('DEBUG: Navigation result:', success);
+                if (!success) {
+                  console.log('DEBUG: Navigation failed, trying alternative route');
+                  this.router.navigate(['/default']).then(altSuccess => {
+                    console.log('DEBUG: Alternative navigation result:', altSuccess);
+                  });
+                }
               });
-            })
-            .catch(err => {
-              console.error('Failed to initialize SignalR connection:', err);
-            });
-            this.router.navigateByUrl('/');
+            }, 100);
           } else if (res.errorCode === 5232 && res.data?.requireForceLogout) {
             this.showForceLogoutPrompt = true;
             this.errorMessage = res.message;
@@ -95,8 +135,29 @@ export default class LoginComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          console.error(err);
-          this.messageService.add({ severity: 'error', summary: 'Something went wrong!!!', detail: err.message });
+          console.error('DEBUG: Login Error:', err);
+          console.error('DEBUG: Error status:', err.status);
+          console.error('DEBUG: Error message:', err.message);
+          console.error('DEBUG: Error details:', err.error);
+          
+          let errorMessage = 'An unexpected error occurred during login';
+          if (err.error && err.error.message) {
+            errorMessage = err.error.message;
+            if (err.error.data && Array.isArray(err.error.data)) {
+              errorMessage += ': ' + err.error.data.join(', ');
+            }
+          } else if (err.message) {
+            errorMessage = err.message;
+          } else if (err.status === 0) {
+            errorMessage = 'Unable to connect to server. Please check your internet connection.';
+          } else if (err.status === 401) {
+            errorMessage = 'Invalid credentials. Please check your username and password.';
+          } else if (err.status === 403) {
+            errorMessage = 'Access denied. Please contact your administrator.';
+          } else if (err.status >= 500) {
+            errorMessage = 'Server error. Please try again later.';
+          }
+          this.messageService.add({ severity: 'error', summary: 'Login Failed', detail: errorMessage });
         }
       });
     }
@@ -119,8 +180,6 @@ export default class LoginComponent implements OnInit, OnDestroy {
   }
 
   private handleForceLogout() {
-    // Clear session storage
-    sessionStorage.removeItem('token');
     // Call logout API to invalidate session on server
     this.userService.logout().subscribe({
       next: (res) => {
@@ -130,12 +189,15 @@ export default class LoginComponent implements OnInit, OnDestroy {
             summary: 'Logged Out',
             detail: 'You have been logged out due to a new login on another device.'
           });
-          this.router.navigateByUrl('/auth/login');
+          // Use secure redirect
+          this.browserSecurity.secureRedirectToLogin();
         }
       },
       error: (err) => {
         console.error(err);
         this.messageService.add({ severity: 'error', summary: 'Logout failed.', detail: err.message });
+        // Still redirect securely even if logout API fails
+        this.browserSecurity.secureRedirectToLogin();
       }
     });
   }

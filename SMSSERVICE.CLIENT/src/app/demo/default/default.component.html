@@ -1,200 +1,299 @@
-<div class="row">
-  <!-- [ sample-page ] start -->
-  <div class="col-xl-4 col-md-6">
-    <div class="card bg-secondary-dark dashnum-card text-white overflow-hidden">
-      <span class="round small"></span>
-      <span class="round big"></span>
-      <div class="card-body">
-        <div class="row">
-          <div class="col">
-            <div class="avtar">
-              <i class="text-white ti ti-credit-card"></i>
+<!-- A2P SMS Service Dashboard - Ethio Telecom Style -->
+<div class="dashboard-container">
+  <!-- Header Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card bg-gradient-primary text-white">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col">
+              <h2 class="mb-1">
+                <i class="ti ti-device-mobile me-2"></i>
+                A2P SMS Service Dashboard
+              </h2>
+              <p class="mb-0 opacity-75">Ethio Telecom Application-to-Person SMS Service Management</p>
             </div>
-          </div>
-          <div class="col-auto">
-            <div class="btn-group" ngbDropdown>
-              <a type="button" class="avtar bg-secondary dropdown-toggle arrow-none" data-bs-toggle="dropdown" ngbDropdownToggle>
-                <i class="ti ti-dots"></i>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
-                <li><button class="dropdown-item" type="button">Import Card</button></li>
-                <li><button class="dropdown-item" type="button">Export</button></li>
-              </ul>
+            <div class="col-auto">
+              <div class="d-flex align-items-center">
+                <div class="me-3 text-end">
+                  <small class="opacity-75">Last Updated</small>
+                  <div class="fw-bold">{{ getCurrentDate() | date:'medium' }}</div>
+                </div>
+                <div class="avtar avtar-lg bg-white bg-opacity-20">
+                  <i class="ti ti-refresh text-white"></i>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <span class="text-white d-block fs-1 fw-bold my-2">1350 <i class="ti ti-arrow-up-right-circle opacity-50"></i></span>
-        <p class="mb-0 opacity-50">Total Pending Orders</p>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-4 col-md-6">
-    <div class="card bg-primary-dark dashnum-card text-white overflow-hidden">
-      <span class="round small"></span>
-      <span class="round big"></span>
-      <div class="card-body">
-        <div class="row">
-          <div class="col">
-            <div class="avtar">
-              <i class="text-white ti ti-credit-card"></i>
-            </div>
-          </div>
-          <div class="col-auto">
-            <ul ngbNav class="nav-tabs nav-pills" #nav="ngbNav" (navChange)="onNavChange($event)">
-              <li class="nav-item" [ngbNavItem]="1">
-                <a class="nav-link text-white" ngbNavLink>Month</a>
-                <ng-template ngbNavContent>
-                  <div class="row">
-                    <div class="col-6">
-                      <span class="text-white d-block fs-1 fw-bold my-2">$108<i class="ti ti-arrow-up-right-circle opacity-50"></i></span>
-                      <p class="mb-0 opacity-50">Total Earning</p>
-                    </div>
-                    <div class="col-6">
-                      <div id="tab-chart-1"></div>
-                    </div>
-                  </div>
-                </ng-template>
-              </li>
-              <li class="nav-item" [ngbNavItem]="2">
-                <a class="nav-link text-white" ngbNavLink>Year</a>
-                <ng-template ngbNavContent>
-                  <div class="row">
-                    <div class="col-6">
-                      <span class="text-white d-block fs-1 fw-bold my-2">$961<i class="ti ti-arrow-down-right-circle opacity-50"></i></span>
-                      <p class="mb-0 opacity-50">C/W Last Year</p>
-                    </div>
-                    <div class="col-6">
-                      <div id="tab-chart-2"></div>
-                    </div>
-                  </div>
-                </ng-template>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div [ngbNavOutlet]="nav"> </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-4 col-md-12">
-    <div class="card bg-primary-dark dashnum-card dashnum-card-small text-white overflow-hidden">
-      <span class="round bg-primary small"></span>
-      <span class="round bg-primary big"></span>
-      <div class="card-body p-3">
-        <div class="d-flex align-items-center">
-          <div class="avtar">
-            <i class="text-white ti ti-credit-card"></i>
-          </div>
-          <div class="ms-2">
-            <h4 class="text-white mb-1">$203k <i class="ti ti-arrow-up-right-circle opacity-50"></i></h4>
-            <p class="mb-0 opacity-50 text-sm">Net Profit</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card dashnum-card dashnum-card-small overflow-hidden">
-      <span class="round bg-warning small"></span>
-      <span class="round bg-warning big"></span>
-      <div class="card-body p-3">
-        <div class="d-flex align-items-center">
-          <div class="avtar bg-light-warning">
-            <i class="text-warning ti ti-credit-card"></i>
-          </div>
-          <div class="ms-2">
-            <h4 class="mb-1">$550K <i class="ti ti-arrow-up-right-circle opacity-50"></i></h4>
-            <p class="mb-0 opacity-50 text-sm">Total Revenue</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="col-xl-8 col-md-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="row mb-3 align-items-center">
-          <div class="col">
-            <small>Total Growth</small>
-            <h3>$2,324.00</h3>
-          </div>
-          <div class="col-auto">
-            <select class="form-select">
-              <option>Today</option>
-              <option selected>This Month</option>
-              <option>This Year</option>
-            </select>
+  <!-- Key Metrics Cards -->
+  <div class="row mb-4">
+    <!-- Total SMS Sent -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card bg-primary text-white h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-lg bg-white bg-opacity-20 me-3">
+              <i class="ti ti-send text-white"></i>
+            </div>
+            <div>
+              <h3 class="mb-1">{{ formatNumber(smsMetrics.totalSent) }}</h3>
+              <p class="mb-0 opacity-75">Total SMS Sent</p>
+            </div>
           </div>
         </div>
-        <div id="growthChart">
-          <apx-chart
-            [series]="chartOptions.series"
-            [chart]="chartOptions.chart"
-            [dataLabels]="chartOptions.dataLabels"
-            [plotOptions]="chartOptions.plotOptions"
-            [responsive]="chartOptions.responsive"
-            [xaxis]="chartOptions.xaxis"
-            [colors]="chartOptions.colors"
-            [grid]="chartOptions.grid"
-            [tooltip]="chartOptions.tooltip"
-          ></apx-chart>
+      </div>
+    </div>
+
+    <!-- Total Delivered -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card bg-success text-white h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-lg bg-white bg-opacity-20 me-3">
+              <i class="ti ti-check-circle text-white"></i>
+            </div>
+            <div>
+              <h3 class="mb-1">{{ formatNumber(smsMetrics.totalDelivered) }}</h3>
+              <p class="mb-0 opacity-75">Total Delivered</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delivery Rate -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card bg-info text-white h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-lg bg-white bg-opacity-20 me-3">
+              <i class="ti ti-percentage text-white"></i>
+            </div>
+            <div>
+              <h3 class="mb-1">{{ smsMetrics.deliveryRate }}%</h3>
+              <p class="mb-0 opacity-75">Delivery Rate</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Revenue -->
+    <div class="col-xl-3 col-md-6 mb-3">
+      <div class="card bg-warning text-white h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="avtar avtar-lg bg-white bg-opacity-20 me-3">
+              <i class="ti ti-currency-birr text-white"></i>
+            </div>
+            <div>
+              <h3 class="mb-1">{{ formatCurrency(smsMetrics.totalRevenue) }}</h3>
+              <p class="mb-0 opacity-75">Total Revenue</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-xl-4 col-md-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="row mb-3 align-items-center">
-          <div class="col">
-            <h4>Popular Stocks</h4>
-          </div>
-          <div class="col-auto"> </div>
+
+  <!-- Charts Row -->
+  <div class="row mb-4">
+    <!-- SMS Volume Chart -->
+    <div class="col-xl-8 mb-3">
+      <div class="card h-100">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="ti ti-chart-line me-2 text-primary"></i>
+            SMS Volume Trends
+          </h5>
+          <small class="text-muted">Monthly SMS sent vs delivered comparison</small>
         </div>
-        <div class="rounded bg-light-secondary overflow-hidden mb-3">
-          <div class="px-3 pt-3">
-            <div class="row mb-1 align-items-start">
-              <div class="col">
-                <h5 class="text-secondary mb-0">Bajaj Finery</h5>
-                <small class="text-muted">10% Profit</small>
-              </div>
-              <div class="col-auto">
-                <h4 class="mb-0">$1839.00</h4>
-              </div>
-            </div>
-          </div>
-          <div id="bajajchart">
+        <div class="card-body">
+          <div id="smsVolumeChart">
             <apx-chart
-              [series]="chartOptions1.series"
-              [chart]="chartOptions1.chart"
-              [dataLabels]="chartOptions1.dataLabels"
-              [plotOptions]="chartOptions1.plotOptions"
-              [responsive]="chartOptions1.responsive"
-              [colors]="chartOptions1.colors"
-              [stroke]="chartOptions1.stroke"
+              [series]="chartOptions.series"
+              [chart]="chartOptions.chart"
+              [dataLabels]="chartOptions.dataLabels"
+              [plotOptions]="chartOptions.plotOptions"
+              [responsive]="chartOptions.responsive"
+              [xaxis]="chartOptions.xaxis"
+              [yaxis]="chartOptions.yaxis"
+              [colors]="chartOptions.colors"
+              [grid]="chartOptions.grid"
+              [tooltip]="chartOptions.tooltip"
+              [legend]="chartOptions.legend"
+              [stroke]="chartOptions.stroke"
+              [fill]="chartOptions.fill"
             ></apx-chart>
           </div>
         </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item px-0" *ngFor="let list of ListGroup">
-            <div class="row align-items-start">
-              <div class="col">
-                <h5 class="mb-0">{{ list.name }}</h5>
-                <small class="text-success">{{ list.profit }}</small>
-              </div>
-              <div class="col-auto">
-                <h4 class="mb-0">
-                  {{ list.invest
-                  }}<span class="ms-2 align-top avtar avtar-xxs {{ list.bgColor }}"><i class="{{ list.icon }} {{ list.color }}"></i></span>
-                </h4>
+      </div>
+    </div>
+
+    <!-- Delivery Rate & Revenue -->
+    <div class="col-xl-4 mb-3">
+      <div class="row">
+        <!-- Delivery Rate Chart -->
+        <div class="col-12 mb-3">
+          <div class="card">
+            <div class="card-header text-center">
+              <h6 class="mb-0">Delivery Rate</h6>
+            </div>
+            <div class="card-body text-center">
+              <div id="deliveryRateChart">
+                <apx-chart
+                  [series]="deliveryRateOptions.series"
+                  [chart]="deliveryRateOptions.chart"
+                  [plotOptions]="deliveryRateOptions.plotOptions"
+                  [colors]="deliveryRateOptions.colors"
+                  [fill]="deliveryRateOptions.fill"
+                  [stroke]="deliveryRateOptions.stroke"
+                ></apx-chart>
               </div>
             </div>
-          </li>
-        </ul>
-        <div class="text-center">
-          <a href="javascripr:" class="b-b-primary text-primary">View all <i class="ti ti-chevron-right"></i></a>
+          </div>
+        </div>
+
+        <!-- Revenue Chart -->
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header text-center">
+              <h6 class="mb-0">Monthly Revenue</h6>
+            </div>
+            <div class="card-body text-center">
+              <div id="revenueChart">
+                <apx-chart
+                  [series]="revenueOptions.series"
+                  [chart]="revenueOptions.chart"
+                  [colors]="revenueOptions.colors"
+                  [stroke]="revenueOptions.stroke"
+                  [fill]="revenueOptions.fill"
+                  [tooltip]="revenueOptions.tooltip"
+                ></apx-chart>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- [ sample-page ] end -->
+
+  <!-- Bottom Row -->
+  <div class="row">
+    <!-- Recent SMS Activities -->
+    <div class="col-xl-6 mb-3">
+      <div class="card h-100">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="ti ti-activity me-2 text-success"></i>
+            Recent SMS Activities
+          </h5>
+          <small class="text-muted">Live monitoring of SMS delivery status</small>
+        </div>
+        <div class="card-body p-0">
+          <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex align-items-center" *ngFor="let activity of recentActivities">
+              <div class="avtar avtar-sm me-3" [ngClass]="'bg-light-' + getStatusColor(activity.status).replace('text-', '')">
+                <i [class]="getStatusIcon(activity.status)" [ngClass]="getStatusColor(activity.status)"></i>
+              </div>
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-1">{{ activity.organization }}</h6>
+                    <small class="text-muted">{{ activity.messageType }} • {{ activity.timestamp }}</small>
+                  </div>
+                  <span class="badge" [ngClass]="{
+                    'bg-success': activity.status === 'Delivered',
+                    'bg-warning': activity.status === 'Pending',
+                    'bg-danger': activity.status === 'Failed'
+                  }">{{ activity.status }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-center">
+          <a href="javascript:void(0)" class="text-primary">
+            View All Activities <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Organizations -->
+    <div class="col-xl-6 mb-3">
+      <div class="card h-100">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="ti ti-building me-2 text-info"></i>
+            Top Organizations by SMS Volume
+          </h5>
+          <small class="text-muted">Leading SMS service consumers</small>
+        </div>
+        <div class="card-body p-0">
+          <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex align-items-center" *ngFor="let org of topOrganizations">
+              <div class="avtar avtar-sm me-3 bg-light-primary">
+                <i [class]="org.icon" class="text-primary"></i>
+              </div>
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <h6 class="mb-1">{{ org.name }}</h6>
+                    <small class="text-success">{{ org.growth }}</small>
+                  </div>
+                  <div class="text-end">
+                    <div class="fw-bold">{{ formatNumber(org.smsCount) }}</div>
+                    <small class="text-muted">SMS</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-center">
+          <a href="javascript:void(0)" class="text-primary">
+            View All Organizations <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions Footer -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card bg-light">
+        <div class="card-body text-center">
+          <div class="row">
+            <div class="col-md-3 mb-2">
+              <a href="/send-message" class="btn btn-primary btn-sm w-100">
+                <i class="ti ti-send me-2"></i>Send SMS
+              </a>
+            </div>
+            <div class="col-md-3 mb-2">
+              <a href="/message" class="btn btn-success btn-sm w-100">
+                <i class="ti ti-users me-2"></i>Manage Groups
+              </a>
+            </div>
+            <div class="col-md-3 mb-2">
+              <a href="/phone" class="btn btn-info btn-sm w-100">
+                <i class="ti ti-phone me-2"></i>Phone Numbers
+              </a>
+            </div>
+            <div class="col-md-3 mb-2">
+              <a href="/report" class="btn btn-warning btn-sm w-100">
+                <i class="ti ti-chart-bar me-2"></i>Reports
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

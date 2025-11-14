@@ -200,14 +200,41 @@ namespace IntegratedImplementation.Services.HRM
 
         public async Task<List<SelectListDto>> GetorganizationNoUser()
         {
-            var users = _userManager.Users.Select(x => x.OrganizationId).ToList();
-                
+            // Get all organizations that are active
             var organizations = await _dbContext.Organizations
-                .Where(e => !users.Contains(e.Id))
+                .Where(e => e.Rowstatus == RowStatus.ACTIVE)
                 .ProjectTo<SelectListDto>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
             return organizations;
+        }
+
+        public async Task<List<SelectListDto>> GetOrganizationsForUser(string userId)
+        {
+            // Get organizations created by the current user or where user is admin
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return new List<SelectListDto>();
+
+            // Check if user is SuperAdmin
+            var isSuperAdmin = await _userManager.IsInRoleAsync(user, "SuperAdmin");
+            
+            if (isSuperAdmin)
+            {
+                // SuperAdmin can see all organizations
+                return await _dbContext.Organizations
+                    .Where(e => e.Rowstatus == RowStatus.ACTIVE)
+                    .ProjectTo<SelectListDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+            }
+            else
+            {
+                // Regular users can only see organizations they created or belong to
+                return await _dbContext.Organizations
+                    .Where(e => e.Rowstatus == RowStatus.ACTIVE && 
+                               (e.CreatedById == userId || e.Id == user.OrganizationId))
+                    .ProjectTo<SelectListDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+            }
         }
         
 

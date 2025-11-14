@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class CommonService {
 
-  baseUrl: string = environment.baseUrl + '/common'
+  baseUrl: string = environment.baseUrl + '/SystemConfiguration'
   baseUrlPdf : string = environment.baseUrl
   constructor( private http: HttpClient,private sanitizer: DomSanitizer) { }
 
@@ -110,7 +110,37 @@ export class CommonService {
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     const day = ("0" + date.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
+  }
 
+  // General Settings Methods
+  getGeneralSettings() {
+    return this.http.get(`${this.baseUrl}/general-settings`);
+  }
+
+  updateGeneralSettings(settings: any) {
+    return this.http.put(`${this.baseUrl}/general-settings`, settings);
+  }
+
+  // SMS Configuration Methods
+  getSmsConfiguration() {
+    return this.http.get(`${this.baseUrl}/sms-configuration`);
+  }
+
+  updateSmsConfiguration(config: any) {
+    return this.http.put(`${this.baseUrl}/sms-configuration`, config);
+  }
+
+  testSmsConnection(testData: any) {
+    return this.http.post(`${this.baseUrl}/sms-configuration/test`, testData);
+  }
+
+  // Security Settings Methods
+  getSecuritySettings() {
+    return this.http.get(`${this.baseUrl}/security-settings`);
+  }
+
+  updateSecuritySettings(settings: any) {
+    return this.http.put(`${this.baseUrl}/security-settings`, settings);
   }
 
 

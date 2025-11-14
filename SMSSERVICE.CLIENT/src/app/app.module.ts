@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AdminComponent } from './theme/layout/admin/admin.component';
-import { NavigationItem } from './theme/layout/admin/navigation/navigation';
+import { NavigationService } from './theme/layout/admin/navigation/navigation';
 import { NavBarComponent } from './theme/layout/admin/nav-bar/nav-bar.component';
 import { NavLeftComponent } from './theme/layout/admin/nav-bar/nav-left/nav-left.component';
 import { NavRightComponent } from './theme/layout/admin/nav-bar/nav-right/nav-right.component';
@@ -48,13 +48,7 @@ import { UpdatMessageComponent } from './pages/send-message/updat-message/updat-
 import { UnsentComponent } from './pages/unsent/unsent.component';
 import { RejectComponent } from './pages/unsent/reject/reject.component';
 import { ReportComponent } from './pages/report/report/report.component';
-
-
-
-
-
-
-
+import { MessageApprovalComponent } from './demo/pages/message-approval/message-approval.component';
 
 @NgModule({
     declarations: [
@@ -78,7 +72,6 @@ import { ReportComponent } from './pages/report/report/report.component';
         UserRoleComponent,
         AutoCompleteComponent,
         CustomerCategoryComponent, MessageGroupComponent,AddGroupsComponent, UpdateGroupComponent, AddPhoneComponent,GroupPhonesComponent, UpdatePhonesComponent, SendMessageComponent, CreateMessageComponent, UpdatMessageComponent, UnsentComponent, RejectComponent, ReportComponent
-
     ],
     providers: [
         {
@@ -87,7 +80,7 @@ import { ReportComponent } from './pages/report/report/report.component';
             multi: true,
         },
         MessageService,
-        NavigationItem
+        NavigationService
     ],
     bootstrap: [AppComponent],
     imports: [BrowserModule, AppRoutingModule, TableModule, BrowserAnimationsModule, HttpClientModule, ToastModule, DropdownModule, ReactiveFormsModule, BreadcrumbModule,NgScrollbarModule,FormsModule]

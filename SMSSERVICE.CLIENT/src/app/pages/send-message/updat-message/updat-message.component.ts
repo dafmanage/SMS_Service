@@ -93,13 +93,28 @@ export class UpdatMessageComponent implements OnInit{
 
             }
             else {
-              this.messageService.add({ severity: 'error', summary: 'Something went Wrong', detail: res.message });
+              // Handle validation errors properly
+              let errorMessage = res.message;
+              if (res.data && Array.isArray(res.data)) {
+                errorMessage = res.data.join(', ');
+              }
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: errorMessage });
 
             }
 
 
           }, error: (err) => {
-            this.messageService.add({ severity: 'error', summary: 'Something went Wrong', detail: err });
+            console.error('Error:', err);
+            let errorMessage = 'An unexpected error occurred';
+            if (err.error && err.error.message) {
+              errorMessage = err.error.message;
+              if (err.error.data && Array.isArray(err.error.data)) {
+                errorMessage += ': ' + err.error.data.join(', ');
+              }
+            } else if (err.message) {
+              errorMessage = err.message;
+            }
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: errorMessage });
           }
         })
 

@@ -25,6 +25,8 @@ export class GroupPhonesComponent implements OnInit{
   isFirstSelectOptionSelected = false;
   selectedOrganization: string = null;
   selectedGroup: string = null;
+  showOrganizationFilter = false; // Control visibility of organization filter
+  isAdmin: boolean = false; // Track if user is Admin
   organizationSelectList: SelectItem[] = []
   messagegroups:IMessagGroupGetDto[]
   groupOptions: SelectItem[] = []
@@ -42,9 +44,40 @@ export class GroupPhonesComponent implements OnInit{
     private msgService: MessageGroupService){}
   ngOnInit(): void {
     this.user= this.userService.getCurrentUser()
+    console.log('DEBUG: GroupPhonesComponent - Current user:', this.user);
+    console.log('DEBUG: GroupPhonesComponent - User roles:', this.user?.role);
 
-    if(this.allowedRoles(['Admin'])){this.getOrganizationsSelectList()}
-    if(this.allowedRoles(['Organization'])){this.getGroup(this.user.organizationId)}
+    if (!this.user) {
+      console.error('DEBUG: GroupPhonesComponent - No current user found');
+      return;
+    }
+
+    // Check user role and load appropriate data
+    console.log('DEBUG: GroupPhonesComponent - Checking roles...');
+    console.log('DEBUG: GroupPhonesComponent - Is SuperAdmin?', this.allowedRoles(['SuperAdmin']));
+    console.log('DEBUG: GroupPhonesComponent - Is Admin?', this.allowedRoles(['Admin']));
+
+    if(this.allowedRoles(['SuperAdmin'])){
+      // SuperAdmin: View only, filter by organization
+      console.log('DEBUG: GroupPhonesComponent - SuperAdmin user: View only with organization filter');
+      this.getOrganizationsSelectList()
+      this.showOrganizationFilter = true
+      this.isAdmin = false // SuperAdmin is read-only
+    } else if(this.allowedRoles(['Admin'])){
+      // Admin: Full access to their organization (add/edit phone numbers)
+      console.log('DEBUG: GroupPhonesComponent - Admin user: Full access to their organization');
+      this.getGroup(this.user.organizationId)
+      this.showOrganizationFilter = false
+      this.isFirstSelectOptionSelected = true // Show group selector immediately for Admin users
+      this.isAdmin = true // Admin can add/edit
+    } else {
+      // Fallback for any other authenticated user
+      console.log('DEBUG: GroupPhonesComponent - User has no specific role, loading default view');
+      this.getGroup(this.user.organizationId)
+      this.showOrganizationFilter = false
+      this.isFirstSelectOptionSelected = true
+      this.isAdmin = false // Default to read-only
+    }
   }
   openFilePicker() {
     this.fileInput.nativeElement.click();
@@ -70,7 +103,9 @@ export class GroupPhonesComponent implements OnInit{
   }
   allowedRoles(allowedRoles: any)
   {
-    return this.userService.roleMatch(allowedRoles)
+    const result = this.userService.roleMatch(allowedRoles);
+    console.log('DEBUG: GroupPhonesComponent - allowedRoles called with:', allowedRoles, 'result:', result);
+    return result;
   }
   getOrganizationsSelectList(){
     this.orgService.getOrganizationsSelectList().subscribe({

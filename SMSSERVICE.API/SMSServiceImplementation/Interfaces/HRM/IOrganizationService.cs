@@ -19,6 +19,7 @@ namespace IntegratedImplementation.Interfaces.HRM
         Task<OrganizationGetDto> Getorganization(Guid organizationId);
         Task<List<SelectListDto>> GetorganizationNoUser();
         Task<List<SelectListDto>> GetorganizationSelectList();
+        Task<List<SelectListDto>> GetOrganizationsForUser(string userId);
         Task<ResponseMessage> changeorganizationImage(OrganizationPostDto addorganization);
 
 

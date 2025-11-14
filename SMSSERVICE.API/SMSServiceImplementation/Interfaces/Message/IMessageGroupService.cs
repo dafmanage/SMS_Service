@@ -15,5 +15,6 @@ namespace SMSServiceImplementation.Interfaces.Message
         Task<List<MessageGroupGetDto>> GetMessageGroups(Guid OrganizationId);
         Task<ResponseMessage> AddMessageGroup(MessageGroupPostDto addMessageGroup);
         Task<ResponseMessage> UpdateMessageGroup(MessageGroupGetDto addMessageGroup);
+        Task<ResponseMessage> CreateSampleMessageGroups();
     }
 }

@@ -1,0 +1,222 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">General Settings</h4>
+        <p class="card-subtitle">Configure general application settings</p>
+        <div class="alert alert-warning" *ngIf="!canEdit">
+          <i class="ti ti-shield-exclamation me-2"></i>
+          <strong>Read Only:</strong> Only SuperAdmin users can modify general settings.
+        </div>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="generalSettingsForm" (ngSubmit)="saveGeneralSettings()">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Application Name <span class="text-danger">*</span></label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  formControlName="applicationName"
+                  placeholder="Enter application name"
+                  [readonly]="!canEdit"
+                >
+                <div class="text-danger" *ngIf="generalSettingsForm.get('applicationName')?.invalid && generalSettingsForm.get('applicationName')?.touched">
+                  Application name is required and must be at least 2 characters
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Company Name <span class="text-danger">*</span></label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  formControlName="companyName"
+                  placeholder="Enter company name"
+                  [readonly]="!canEdit"
+                >
+                <div class="text-danger" *ngIf="generalSettingsForm.get('companyName')?.invalid && generalSettingsForm.get('companyName')?.touched">
+                  Company name is required and must be at least 2 characters
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Company Address <span class="text-danger">*</span></label>
+                <textarea 
+                  class="form-control" 
+                  formControlName="companyAddress"
+                  rows="3"
+                  placeholder="Enter company address"
+                  [readonly]="!canEdit"
+                ></textarea>
+                <div class="text-danger" *ngIf="generalSettingsForm.get('companyAddress')?.invalid && generalSettingsForm.get('companyAddress')?.touched">
+                  Company address is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Company Phone <span class="text-danger">*</span></label>
+                <input 
+                  type="tel" 
+                  class="form-control" 
+                  formControlName="companyPhone"
+                  placeholder="Enter company phone"
+                  [readonly]="!canEdit"
+                >
+                <div class="text-danger" *ngIf="generalSettingsForm.get('companyPhone')?.invalid && generalSettingsForm.get('companyPhone')?.touched">
+                  Company phone is required
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Company Email <span class="text-danger">*</span></label>
+                <input 
+                  type="email" 
+                  class="form-control" 
+                  formControlName="companyEmail"
+                  placeholder="Enter company email"
+                  [readonly]="!canEdit"
+                >
+                <div class="text-danger" *ngIf="generalSettingsForm.get('companyEmail')?.invalid && generalSettingsForm.get('companyEmail')?.touched">
+                  Valid email address is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Session Timeout (minutes) <span class="text-danger">*</span></label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  formControlName="sessionTimeout"
+                  min="5" 
+                  max="60"
+                  placeholder="Enter session timeout"
+                  [readonly]="!canEdit"
+                >
+                <div class="text-danger" *ngIf="generalSettingsForm.get('sessionTimeout')?.invalid && generalSettingsForm.get('sessionTimeout')?.touched">
+                  Session timeout must be between 5 and 60 minutes
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Max Login Attempts <span class="text-danger">*</span></label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  formControlName="maxLoginAttempts"
+                  min="3" 
+                  max="10"
+                  placeholder="Enter max login attempts"
+                  [readonly]="!canEdit"
+                >
+                <div class="text-danger" *ngIf="generalSettingsForm.get('maxLoginAttempts')?.invalid && generalSettingsForm.get('maxLoginAttempts')?.touched">
+                  Max login attempts must be between 3 and 10
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Default Language <span class="text-danger">*</span></label>
+                <select class="form-control" formControlName="defaultLanguage" [disabled]="!canEdit">
+                  <option value="en">English</option>
+                  <option value="am">Amharic</option>
+                  <option value="or">Oromo</option>
+                </select>
+                <div class="text-danger" *ngIf="generalSettingsForm.get('defaultLanguage')?.invalid && generalSettingsForm.get('defaultLanguage')?.touched">
+                  Default language is required
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Time Zone <span class="text-danger">*</span></label>
+                <select class="form-control" formControlName="timeZone" [disabled]="!canEdit">
+                  <option value="UTC">UTC</option>
+                  <option value="Africa/Addis_Ababa">Africa/Addis_Ababa</option>
+                  <option value="Africa/Nairobi">Africa/Nairobi</option>
+                </select>
+                <div class="text-danger" *ngIf="generalSettingsForm.get('timeZone')?.invalid && generalSettingsForm.get('timeZone')?.touched">
+                  Time zone is required
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    formControlName="enableNotifications"
+                    id="enableNotifications"
+                    [disabled]="!canEdit"
+                  >
+                  <label class="form-check-label" for="enableNotifications">
+                    Enable Notifications
+                  </label>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="form-check">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    formControlName="enableAuditLog"
+                    id="enableAuditLog"
+                    [disabled]="!canEdit"
+                  >
+                  <label class="form-check-label" for="enableAuditLog">
+                    Enable Audit Log
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <div class="d-flex gap-2">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary"
+                  [disabled]="isLoading || generalSettingsForm.invalid || !canEdit"
+                  *ngIf="canEdit"
+                >
+                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                  {{ isLoading ? 'Saving...' : 'Save Settings' }}
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-secondary"
+                  (click)="resetForm()"
+                  [disabled]="isLoading || !canEdit"
+                  *ngIf="canEdit"
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

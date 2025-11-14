@@ -1,5 +1,7 @@
 ﻿using Implementation.Interfaces.Authentication;
 using Implementation.Services.Authentication;
+using Implementation.Interfaces.Configuration;
+using Implementation.Services.Configuration;
 using IntegratedImplementation.Interfaces.Configuration;
 using IntegratedImplementation.Interfaces.HRM;
 using IntegratedImplementation.Services.Configuration;
@@ -28,6 +30,9 @@ namespace IntegratedImplementation.Datas
             services.AddScoped<IGroupPhoneService, GroupPhoneService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IReport, ReportService>();
+            
+            // Configuration services
+            services.AddScoped<ISystemConfigurationService, SystemConfigurationService>();
             
             services.AddScoped<IAuthorizationHandler, TokenBlacklistHandler>();
 
